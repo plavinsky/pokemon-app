@@ -1,13 +1,21 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import React from "react";
+import ReactDOM from "react-dom";
+
+import HeaderBlock from "./components/HeaderBlock";
+
+import './index.css'
+
+import App from "./App"
+
+// const el = React.createElement(
+//   'h1',
+//   null,
+//   'Hello World, ReactJS!'
+// );
 
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+
+
+
+ReactDOM.render(<App />, document.getElementById('root'));
 
