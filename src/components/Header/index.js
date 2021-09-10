@@ -1,14 +1,15 @@
 import s from './style.module.css';
 
-const Header = ({title='Default title', descr='Default description'}) => {
+
+const Header = ({title=null, descr=null}) => {
     return (
-        <div className={s.root}>
+        <header className={s.root}>
             <div className={s.forest}></div>
-            <div>
-                <h1>{title}</h1>
-                <p>{descr}</p>
+            <div className={s.container}>
+                <h1>{title || 'Default title' }</h1>
+                <p>{ descr ? descr : 'Default description' }</p>
             </div>
-        </div>
+        </header>
     )
 
 }

@@ -1,29 +1,29 @@
 import s from "./style.module.css";
 
-const Layout = ({title="Layout", descr="Layout descr", urlBg, colorBg}) => {
-    // const layoutStyle = {
-    //     backgroundImage: urlBg,
-    //     backgroundColor: colorBg
-    // }
-    
+
+const Layout = ({title=null, descr=null, urlBg, colorBg}) => {
+   
     return (
-        <div className={s.root}>
+        <section className={s.root}>
             <div className={s.wrapper} style={{
                 backgroundImage: `url("${urlBg}")`,
                 backgroundColor: colorBg
             }}>
                 <article>
-                <div className={s.title}>
-                    <h2 >{title}</h2>
-                    <span className={s.separator}></span>
-                </div>
-                <div className={`${s.desc} ${s.full}`}>
-                    <p>{descr}</p>
-                </div>
+
+                    <div className={s.title}>
+                        {
+                            title &&  <h3 >{title || 'Layout'}</h3>
+                        }
+                        <span className={s.separator}></span>
+                    </div>
+                    <div className={`${s.desc} ${s.full}`}>
+                        <p>{descr || "Layout descr"}</p>
+                    </div>
                 </article>
                 
             </div>
-        </div>
+        </section>
     )
 }
 

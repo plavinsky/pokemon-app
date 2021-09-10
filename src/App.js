@@ -8,21 +8,6 @@ import Footer from './components/Footer';
 
 import BGIMage from '../src/assets/bg1.jpeg';
 
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Hello world, ReactJS!
-//         </p>
-       
-//       </header>
-//     </div>
-//   );
-// }
-
-
 
 const AppList = () => {
   const items = ['Item1', 'Item2', 'Item3', 'Item4'];
@@ -80,19 +65,11 @@ const AppInput = () => {
 function App () {
   return (
     <>
-      <Header title="New title" />
-      <Layout urlBg={BGIMage}/>
-      <Layout colorBg="green"/>
-      <Layout urlBg={BGIMage}/>
+      <Header title="Pokemon game" descr="Simple triple triad card game with pokemons"/>
+      <Layout title="L1" descr="Desc01" urlBg={BGIMage}/>
+      <Layout title="L2" descr="Desc2" colorBg="green"/>
+      <Layout title="L3" descr="Desc3" urlBg={BGIMage}/>
       <Footer />
-      {/* <HeaderBlock />
-      <AppHeader />
-      <AppList />
-      <AppHeader />
-      <AppList />
-      <AppHeader />
-      <AppList />
-      <AppInput /> */}
     </>
   );
 }
