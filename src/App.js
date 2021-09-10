@@ -65,7 +65,7 @@ const AppInput = () => {
 function App () {
   return (
     <>
-      <Header title="New title" descr="Description"/>
+      <Header title="Pokemon game" descr="Simple triple triad card game with pokemons"/>
       <Layout title="L1" descr="Desc01" urlBg={BGIMage}/>
       <Layout title="L2" descr="Desc2" colorBg="green"/>
       <Layout title="L3" descr="Desc3" urlBg={BGIMage}/>
