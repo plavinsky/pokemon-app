@@ -1,11 +1,7 @@
 import s from "./style.module.css";
 
 const Layout = ({title=null, descr=null, urlBg, colorBg}) => {
-    // const layoutStyle = {
-    //     backgroundImage: urlBg,
-    //     backgroundColor: colorBg
-    // }
-    
+   
     return (
         <section className={s.root}>
             <div className={s.wrapper} style={{
