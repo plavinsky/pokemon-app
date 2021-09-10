@@ -1,5 +1,6 @@
 import s from './style.module.css';
 
+
 const Header = ({title=null, descr=null}) => {
     return (
         <header className={s.root}>

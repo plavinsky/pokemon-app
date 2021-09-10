@@ -1,5 +1,6 @@
 import s from "./style.module.css";
 
+
 const Layout = ({title=null, descr=null, urlBg, colorBg}) => {
    
     return (
@@ -9,6 +10,7 @@ const Layout = ({title=null, descr=null, urlBg, colorBg}) => {
                 backgroundColor: colorBg
             }}>
                 <article>
+
                     <div className={s.title}>
                         {
                             title &&  <h3 >{title || 'Layout'}</h3>
