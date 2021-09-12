@@ -3,8 +3,6 @@ import s from "./style.module.css";
 
 
 const Layout = ({title=null, urlBg, colorBg, children }) => {
-   
-    //console.log('####: props: ', props);
 
     return (
         <section className={s.root}>
