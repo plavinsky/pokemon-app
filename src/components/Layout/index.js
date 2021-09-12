@@ -1,8 +1,11 @@
 import s from "./style.module.css";
 
 
-const Layout = ({title=null, descr=null, urlBg, colorBg}) => {
+
+const Layout = ({title=null, urlBg, colorBg, children }) => {
    
+    //console.log('####: props: ', props);
+
     return (
         <section className={s.root}>
             <div className={s.wrapper} style={{
@@ -18,7 +21,7 @@ const Layout = ({title=null, descr=null, urlBg, colorBg}) => {
                         <span className={s.separator}></span>
                     </div>
                     <div className={`${s.desc} ${s.full}`}>
-                        <p>{descr || "Layout descr"}</p>
+                        {children}
                     </div>
                 </article>
                 
