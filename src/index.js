@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import HeaderBlock from "./components/HeaderBlock";
 
 import './index.css'
 
@@ -12,9 +11,6 @@ import App from "./App"
 //   null,
 //   'Hello World, ReactJS!'
 // );
-
-
-
 
 
 ReactDOM.render(<App />, document.getElementById('root'));
