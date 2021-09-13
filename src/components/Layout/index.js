@@ -1,4 +1,4 @@
-imposrt cn from 'classnames';
+import cn from "classnames";
 
 import s from "./style.module.css";
 
