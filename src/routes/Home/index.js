@@ -9,6 +9,8 @@ import BGIMage1 from '../../assets/bg1.jpeg';
 import BGIMage3 from '../../assets/bg3.jpeg';
 
 import POKEMONS from '../../data/pokemons.json';
+import MenuHeader from '../../components/MenuHeader';
+
 
 function HomePage ({onChangePage}) {
   
@@ -18,11 +20,17 @@ function HomePage ({onChangePage}) {
 
   return (
     <>
+      <MenuHeader />
+
       <Header 
           title="Pokemon game" 
           descr="Simple triple triad card game with pokemons"
           onGameClick={handleGameClick}
-        />
+        >
+            
+
+        </Header>
+
       
       <Layout title="L1" descr="Desc01" urlBg={BGIMage3}>
         <p>In the game two players face off against one another, one side playing as "blue", the other as "red" on a 3x3 grid. <br/>
