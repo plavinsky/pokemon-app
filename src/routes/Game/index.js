@@ -1,16 +1,20 @@
 
+import { useHistory } from "react-router";
 import MenuHeader from "../../components/MenuHeader";
 
 const GamePage = ({onChangePage}) => {
 
+    const history = useHistory();
+
     const handleButtonClick = () => {
-        onChangePage && onChangePage('app');
+        history.push('');
+        //onChangePage && onChangePage('app');
     }
 
     return (
 
         <>        
-        <MenuHeader bgActive={true}/>
+        
         <div >
             <button onClick={handleButtonClick}>Home Page</button>
         </div>

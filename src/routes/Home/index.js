@@ -20,7 +20,7 @@ function HomePage ({onChangePage}) {
 
   return (
     <>
-      <MenuHeader />
+      
 
       <Header 
           title="Pokemon game" 
@@ -53,7 +53,7 @@ function HomePage ({onChangePage}) {
       </Layout>
       
       <Layout title="L3" descr="Desc3" urlBg={BGIMage1}/>
-      <Footer />
+      
     </>
   );
 }

@@ -1,19 +1,26 @@
 import cn from "classnames";
-import { useState } from "react";
+import { useHistory } from "react-router";
 import s from "./style.module.css";
 
 
 const Navbar = ({onBtnClick, isActive, bgActive = false}) => {
   
+    const history = useHistory();
+
     const handleClick = () => {
 
         onBtnClick && onBtnClick();
     }
 
+    const handleLogoClick = () => {
+        history.push('');
+    }
+
+    //className={cn(s.root, {[s.bgActive]: bgActive})}
     return (
         <nav id={s.navbar} className={cn(s.root, {[s.bgActive]: bgActive})}>
         <div className={s.navWrapper}>
-            <p className={s.brand} >
+            <p className={s.brand} onClick={handleLogoClick}>
             LOGO
             </p>
             <div className={cn(s.menuButton, {[s.active]:!isActive})} onClick={handleClick}>
