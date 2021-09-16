@@ -2,14 +2,13 @@ import s from './style.module.css';
 
 import Header from '../../components/Header';
 import Layout from '../../components/Layout';
-import Footer from '../../components/Footer';
 import PokemonCard from '../../components/PokemonCard';
 
 import BGIMage1 from '../../assets/bg1.jpeg';
 import BGIMage3 from '../../assets/bg3.jpeg';
 
 import POKEMONS from '../../data/pokemons.json';
-import MenuHeader from '../../components/MenuHeader';
+
 
 
 function HomePage ({onChangePage}) {
