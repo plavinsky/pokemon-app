@@ -4,11 +4,9 @@ import s from "./style.module.css";
 
 
 const Navbar = ({onBtnClick, isActive, bgActive = false}) => {
-  
     const history = useHistory();
 
     const handleClick = () => {
-
         onBtnClick && onBtnClick();
     }
 
@@ -16,9 +14,8 @@ const Navbar = ({onBtnClick, isActive, bgActive = false}) => {
         history.push('');
     }
 
-    //className={cn(s.root, {[s.bgActive]: bgActive})}
     return (
-        <nav id={s.navbar} className={cn(s.root, {[s.bgActive]: bgActive})}>
+        <nav id={s.navbar} className={cn({[s.bgActive]: bgActive})}>
         <div className={s.navWrapper}>
             <p className={s.brand} onClick={handleLogoClick}>
             LOGO

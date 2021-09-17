@@ -16,6 +16,10 @@ const GamePage = ({onChangePage}) => {
     }
 
     const handleCardClick = (id) => {
+        // const res = pokemons.slice();
+        // const card = res.find(item => item.id === id).active = ;
+        // card.
+        
         setPokemons(pokemons.map( item => {
             if (item.id === id){
                 item.active = !item.active;
