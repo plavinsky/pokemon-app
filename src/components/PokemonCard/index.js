@@ -5,11 +5,11 @@ import cardBacksideImg from './assets/card-back-side.jpeg';
 
 import s from './style.module.css';
 
-const PokemonCard = ({name, img, id, type, values, active, handleCardClick}) => {
+const PokemonCard = ({name, img, id, type, values, active, handleCardClick, dbKey}) => {
     
     
     const handleClick = () => {
-        handleCardClick(id);
+        handleCardClick(dbKey);
     }
     
     return (    

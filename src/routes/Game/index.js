@@ -25,13 +25,15 @@ const GamePage = ({onChangePage}) => {
         setDbChange(prevState => !prevState);
     }
 
-    const handleCardClick = (id) => {
+    const handleCardClick = (dbKey) => {
         setPokemons(prevState => {
             return Object.entries(prevState).reduce((acc, item) => {
                 const pokemon = {...item[1]};
-                if (pokemon.id === id) {
+                const pKey = item[0];
+                
+                if (pKey === dbKey) {
                     pokemon.active = !pokemon.active;
-                    database.ref('pokemons/'+ getKeyById(pokemon.id)).set(pokemon);
+                    database.ref('pokemons/'+ dbKey).set(pokemon);
                 };
         
                 acc[item[0]] = pokemon;
@@ -51,8 +53,8 @@ const GamePage = ({onChangePage}) => {
 
     }
 
-    const onPokemonCardClick = () => {
-
+    const onPokemonCardClick = (target) => {
+        console.log("Click on:",target);
     }
 
     return (
@@ -66,6 +68,7 @@ const GamePage = ({onChangePage}) => {
               Object.entries(pokemons).map(([key, {name, id, img, type, values, active}]) => 
               <PokemonCard 
               key={key} 
+              dbKey={key}
               name={name} 
               id={id} 
               img={img} 
@@ -73,7 +76,7 @@ const GamePage = ({onChangePage}) => {
               values={values} 
               active={active} 
               handleCardClick={handleCardClick}
-              onClick={onPokemonCardClick}/>)
+              />)
             }
         </div>
 
