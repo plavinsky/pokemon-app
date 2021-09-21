@@ -35,6 +35,12 @@ class Firebase{
     });
   }
 
+  offPokemonSocket = (cb) => {
+    this.database.ref('pokemons').off('value', (s) => {
+      cb(s.val());
+    });
+  }
+
   getPokemonsOnce = async () => {
     return await this.database.ref('pokemons').once("value").then(snapshot => snapshot.val());
   }

@@ -3,10 +3,14 @@ import {database, addPokemon} from "../../../../services/firebase";
 import PokemonCard from "../../../../components/PokemonCard";
 import s from './style.module.css';
 import { FireBaseContext } from "../../../../context/firebaseContext";
+import { PokemonContext } from "../../../../context/pokemonContext";
+import { useHistory } from "react-router";
 
 const StartPage = ({onChangePage}) => {
     const firebase = useContext(FireBaseContext);
-    console.log("###:", firebase);
+    const pokemonsContext = useContext(PokemonContext);
+    const history = useHistory();
+    console.log("###:", pokemonsContext);
 
     const [pokemons, setPokemons] = useState({});
     const [dbChange, setDbChange] = useState(false);
@@ -15,6 +19,8 @@ const StartPage = ({onChangePage}) => {
         firebase.getPokemonSocket((pokemons) => {
             setPokemons(pokemons);
         })
+
+        return () => firebase.offPokemonSocket();
     }, []);
 
     
@@ -31,34 +37,47 @@ const StartPage = ({onChangePage}) => {
 
     }
 
-    const handleCardClick = (dbKey) => {
+    const handleStartGame = () => {
+        history.push('/game/board')
+    }
 
+    const handleCardClick = (key) => {
+        const pokemon = {...pokemons[key]};
+        pokemonsContext.onSelectedPokemon(key, pokemon);
+
+        setPokemons(prevState => ({
+            ...prevState,
+            [key]: {
+                ...prevState[key],
+                selected: !prevState[key].selected
+            }
+        }))
         
-        setPokemons(prevState => {
-            return Object.entries(prevState).reduce((acc, item) => {
-                const pokemon = {...item[1]};
-                const pKey = item[0];
+        // setPokemons(prevState => {
+        //     return Object.entries(prevState).reduce((acc, item) => {
+        //         const pokemon = {...item[1]};
+        //         const pKey = item[0];
                 
-                if (pKey === dbKey) {
-                    pokemon.active = !pokemon.active;
-                   // database.ref('pokemons/'+ dbKey).set(pokemon);
-                   firebase.postPokemon(pKey, pokemon);
-                };
+        //         if (pKey === dbKey) {
+        //             pokemon.active = !pokemon.active;
+        //            // database.ref('pokemons/'+ dbKey).set(pokemon);
+        //            firebase.postPokemon(pKey, pokemon);
+        //         };
         
-                acc[item[0]] = pokemon;
+        //         acc[item[0]] = pokemon;
         
-                return acc;
-            }, {});
-        });
+        //         return acc;
+        //     }, {});
+        // });
 
-        function getKeyById(id){
-            const res = Object.entries(pokemons).find( ([key, item]) => {    
-                if (item && (item.id === id)) {
-                    return true;
-                }
-            })
-            return res[0];
-        }      
+        // function getKeyById(id){
+        //     const res = Object.entries(pokemons).find( ([key, item]) => {    
+        //         if (item && (item.id === id)) {
+        //             return true;
+        //         }
+        //     })
+        //     return res[0];
+        // }      
 
     }
 
@@ -67,11 +86,14 @@ const StartPage = ({onChangePage}) => {
         <>        
         <div className={s.flex}>
             <button onClick={handleAddPokemonClick}>ADD NEW POKEMON</button>
+            <button 
+                onClick={handleStartGame}
+                disabled={Object.keys(pokemonsContext.pokemon).length < 5}>START GAME</button>
         </div>
 
         <div className={s.flex} >
             {
-              Object.entries(pokemons).map(([key, {name, id, img, type, values, active}]) => 
+              Object.entries(pokemons).map(([key, {name, id, img, type, values, selected}]) => 
               <PokemonCard 
               className={s.card}
               key={key} 
@@ -81,9 +103,13 @@ const StartPage = ({onChangePage}) => {
               img={img} 
               type={type} 
               values={values} 
-              active={active} 
-              handleCardClick={handleCardClick}
-              style="height: 100em"/>)
+              active={true} 
+              isSelected={selected}
+              handleCardClick={() => {
+                if (Object.keys(pokemonsContext.pokemon).length < 5 || selected)
+                handleCardClick(key)}
+            }
+              />)
             }
         </div>
 
