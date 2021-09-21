@@ -1,27 +1,39 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {database, addPokemon} from "../../../../services/firebase";
 import PokemonCard from "../../../../components/PokemonCard";
 import s from './style.module.css';
+import { FireBaseContext } from "../../../../context/firebaseContext";
 
 const StartPage = ({onChangePage}) => {
+    const firebase = useContext(FireBaseContext);
+    console.log("###:", firebase);
+
     const [pokemons, setPokemons] = useState({});
     const [dbChange, setDbChange] = useState(false);
     
     useEffect(() => {
-        database.ref('pokemons').once('value', (snapshot) => {
-            console.log("###:", snapshot.val());
-            setPokemons(snapshot.val());
-        });
-    }, [dbChange]);
+        firebase.getPokemonSocket((pokemons) => {
+            setPokemons(pokemons);
+        })
+    }, []);
+
+    
 
     const handleAddPokemonClick = () => {
         const data = Object.entries(pokemons)[Math.round(Math.random()*(Object.entries(pokemons).length-1))];
-        const newKey = addPokemon(data);
-        pokemons[newKey] = data[1];
-        setPokemons({...pokemons});
+        // const newKey = addPokemon(data);
+        // pokemons[newKey] = data[1];
+        // setPokemons({...pokemons});
+        
+        firebase.addPokemon(data[1], async () => {
+            //await getPokemons();
+        })
+
     }
 
     const handleCardClick = (dbKey) => {
+
+        
         setPokemons(prevState => {
             return Object.entries(prevState).reduce((acc, item) => {
                 const pokemon = {...item[1]};
@@ -29,7 +41,8 @@ const StartPage = ({onChangePage}) => {
                 
                 if (pKey === dbKey) {
                     pokemon.active = !pokemon.active;
-                    database.ref('pokemons/'+ dbKey).set(pokemon);
+                   // database.ref('pokemons/'+ dbKey).set(pokemon);
+                   firebase.postPokemon(pKey, pokemon);
                 };
         
                 acc[item[0]] = pokemon;
@@ -60,6 +73,7 @@ const StartPage = ({onChangePage}) => {
             {
               Object.entries(pokemons).map(([key, {name, id, img, type, values, active}]) => 
               <PokemonCard 
+              className={s.card}
               key={key} 
               dbKey={key}
               name={name} 
