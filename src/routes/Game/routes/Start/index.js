@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import {database, addPokemon} from "../../services/firebase";
-import PokemonCard from "../../components/PokemonCard";
+import {database, addPokemon} from "../../../../services/firebase";
+import PokemonCard from "../../../../components/PokemonCard";
 import s from './style.module.css';
 
 const StartPage = ({onChangePage}) => {
