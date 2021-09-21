@@ -53,9 +53,6 @@ const GamePage = ({onChangePage}) => {
 
     }
 
-    // const onPokemonCardClick = (target) => {
-    //     console.log("Click on:",target);
-    // }
 
     return (
         <>        
