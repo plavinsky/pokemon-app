@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import database from "../../services/firebase";
+import {database, addPokemon} from "../../services/firebase";
 
 import PokemonCard from "../../components/PokemonCard";
 
@@ -19,10 +19,10 @@ const GamePage = ({onChangePage}) => {
 
     const handleAddPokemonClick = () => {
         
-        const data = Object.entries(pokemons)[Math.round(Math.random()*Object.entries(pokemons).length)];
-        const newKey = database.ref().child('pokemons').push().key;
-        database.ref('pokemons/' + newKey).set(data[1]);
-        setDbChange(prevState => !prevState);
+        const data = Object.entries(pokemons)[Math.round(Math.random()*(Object.entries(pokemons).length-1))];
+        const newKey = addPokemon(data);
+        pokemons[newKey] = data[1];
+        setPokemons({...pokemons});
     }
 
     const handleCardClick = (dbKey) => {
@@ -53,9 +53,9 @@ const GamePage = ({onChangePage}) => {
 
     }
 
-    const onPokemonCardClick = (target) => {
-        console.log("Click on:",target);
-    }
+    // const onPokemonCardClick = (target) => {
+    //     console.log("Click on:",target);
+    // }
 
     return (
         <>        

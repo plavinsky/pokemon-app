@@ -25,6 +25,13 @@ firebase.initializeApp(firebaseConfig);
 
 export const database = firebase.database();
 
+export function addPokemon(data) {
+  const newKey = database.ref().child('pokemons').push().key;
+  database.ref('pokemons/' + newKey).set(data[1]);
+
+  return newKey;
+}
+
 // export async function getPokemons(database) {
 //     const pokemonsCol = collection(database, 'pokemons');
 //     const pokemonsSnapshot = await getDocs(pokemonsCol);
