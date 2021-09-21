@@ -13,7 +13,7 @@ const PokemonCard = ({name, img, id, type, values, active, handleCardClick, dbKe
     }
     
     return (    
-        // <div className={s.root} onClick={handleClick}>
+        <div className={s.root} onClick={handleClick}>
             <div className={cn(className, s.pokemonCard, {[s.active]:active})}>
                 <div className={s.cardFront}>
                     <div className={cn(s.wrap, s.front)}>
@@ -43,7 +43,7 @@ const PokemonCard = ({name, img, id, type, values, active, handleCardClick, dbKe
                 </div>
 
             </div>
-        // </div>
+         </div>
         
     );
 }
