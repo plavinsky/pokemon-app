@@ -5,7 +5,7 @@ import cardBacksideImg from './assets/card-back-side.jpeg';
 
 import s from './style.module.css';
 
-const PokemonCard = ({name, img, id, type, values, active, handleCardClick, dbKey, className, minimize, isSelected}) => {
+const PokemonCard = ({name, img, id, type, values, active, handleCardClick, dbKey, className, minimize, isSelected, posession}) => {
     
     
     
@@ -20,7 +20,7 @@ const PokemonCard = ({name, img, id, type, values, active, handleCardClick, dbKe
             onClick={handleClick}>
                 <div className={s.cardFront}>
                     <div className={cn(s.wrap, s.front)}>
-                        <div className={cn(s.pokemon, s[type])}>
+                        <div className={cn(s.pokemon, s[type], s[posession])} >
                             <div className={s.values}>
                                 <div className={cn(s.count, s.top)}>{values.top}</div>
                                 <div className={cn(s.count, s.right)}>{values.right}</div>
