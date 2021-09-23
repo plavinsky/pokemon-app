@@ -62,6 +62,9 @@ const BoardPage = () => {
                 }
 
 
+
+
+
                
             </div>
         </div>
