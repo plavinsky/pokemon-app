@@ -46,39 +46,13 @@ const StartPage = ({onChangePage}) => {
         pokemonsContext.onSelectedPokemon(key, pokemon);
 
         setPokemons(prevState => ({
-            ...prevState,
-            [key]: {
-                ...prevState[key],
-                selected: !prevState[key].selected
-            }
-        }))
-        
-        // setPokemons(prevState => {
-        //     return Object.entries(prevState).reduce((acc, item) => {
-        //         const pokemon = {...item[1]};
-        //         const pKey = item[0];
-                
-        //         if (pKey === dbKey) {
-        //             pokemon.active = !pokemon.active;
-        //            // database.ref('pokemons/'+ dbKey).set(pokemon);
-        //            firebase.postPokemon(pKey, pokemon);
-        //         };
-        
-        //         acc[item[0]] = pokemon;
-        
-        //         return acc;
-        //     }, {});
-        // });
-
-        // function getKeyById(id){
-        //     const res = Object.entries(pokemons).find( ([key, item]) => {    
-        //         if (item && (item.id === id)) {
-        //             return true;
-        //         }
-        //     })
-        //     return res[0];
-        // }      
-
+                ...prevState,
+                [key]: {
+                    ...prevState[key],
+                    selected: !prevState[key].selected
+                }
+            }))
+            
     }
 
 

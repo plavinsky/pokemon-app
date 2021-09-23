@@ -11,13 +11,8 @@ const GamePage = () => {
     const match = useRouteMatch();
     const firebase = useContext(FireBaseContext);
     const [selectedPokemons, setSelectedPokemons] = useState({});
-    
-    console.log("selectedPokemons:", selectedPokemons);
-    
 
     const handleSelectedPokemons = (key, pokemon) => {
-        console.log('handleSelectedPokemons');
-
         setSelectedPokemons(prevState => {
             if (prevState[key])
             {
