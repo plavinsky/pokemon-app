@@ -10,7 +10,7 @@ const PokemonCard = ({name, img, id, type, values, active, handleCardClick, dbKe
     
     
     const handleClick = () => {
-        handleCardClick(dbKey);
+        handleCardClick && handleCardClick(dbKey);
     }
     
     return (    
