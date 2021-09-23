@@ -22,7 +22,7 @@ const counterWin = (board, player1, player2) => {
 
 
 const BoardPage = () => {
-    const {pokemon} = useContext(PokemonContext);
+    let {pokemon, pokemons1, pokemons2} = useContext(PokemonContext);
     const [board, setBoard] = useState([]);
     
     const [player1, setPlayer1] = useState(() => {
@@ -56,6 +56,11 @@ const BoardPage = () => {
             }
         )
 
+        pokemons1 = {...player1};
+        pokemons2 = {...player2};
+
+        console.log("poks1:", pokemons1);
+
     }, [])
 
     useEffect(() => {
@@ -64,13 +69,15 @@ const BoardPage = () => {
             const [count1, count2] = counterWin(board, player1, player2);
 
             if (count1 > count2)
-                alert("WIN");
+                console.log("WIN");
 
             if (count1 < count2)
-                alert("LOSE");
+                console.log("LOSE");
 
             if (count1 === count2)
-                alert("DRAW");
+                console.log("DRAW");
+
+            history.push("/game/finish")
         }
         
     }, [steps]);
@@ -111,7 +118,7 @@ const BoardPage = () => {
             }
 
             setBoard(request.data);
-            setSteps(steps+1)
+            setSteps(steps+1);
 
         }
 

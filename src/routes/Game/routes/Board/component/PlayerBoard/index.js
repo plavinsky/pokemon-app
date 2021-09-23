@@ -9,11 +9,12 @@ const PlayerBoard = ({cards, onClickCard, player}) => {
     const [isSelected,setSelected] = useState(null);
 
     console.log("cards:", cards);
+    //debugger;
 
     return (
         <>
             {
-                cards.map(
+                cards && cards.map(
                     (item) => (
                     <div className={cn(s.cardBoard, 
                         {[s.selected]: isSelected === item.id})}
