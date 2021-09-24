@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PokemonCard from '../../../../../../components/PokemonCard';
 import s from './style.module.css';
+import cn from 'classnames';
 
-const FinishCards = ({cards, player}) => {
-    
+const FinishCards = ({cards, player, ifWiner, onClickNewCard}) => {
+    const [isSelected,setSelected] = useState(null);
+
+
     console.log("cards:",cards);
+    console.log("ifWiner:",ifWiner);
     // return (
     //     <>
     //     </>
@@ -17,14 +21,12 @@ const FinishCards = ({cards, player}) => {
             {
                 cards && cards.map(
                     (item) => (
-                    // <div className={cn(s.cardBoard, 
-                    //     {[s.selected]: isSelected === item.id})}
-                    //     onClick={() => {
-                    //         setSelected(item.id);
-                    //         onClickCard && onClickCard({
-                    //             player,
-                    //             ...item})
-                    //     }}>
+                    <div className={cn(s.cardBoard,
+                        {[s.selected]: isSelected === item.id})}
+                        onClick={() => {
+                            ifWiner && setSelected(item.id);
+                            ifWiner && onClickNewCard(item);
+                        }}>
                         <PokemonCard
                         key={item.id} 
                         dbKey={item.id}
@@ -37,7 +39,7 @@ const FinishCards = ({cards, player}) => {
                         isSelected={item.selected}
                         minimize
                         possession=""/>
-                    // </div>
+                    </div>
                 ) )
             }
 

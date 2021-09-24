@@ -11,6 +11,7 @@ const GamePage = () => {
     const [selectedPokemons, setSelectedPokemons] = useState({});
     const [player2Cards, setPlayer2Cards] = useState([]);
     const [winerResult, setWinerResult] = useState(undefined);
+    const [newCard, setNewCard] = useState(null);
 
     const handleSelectedPokemons = (key, pokemon) => {
         setSelectedPokemons(prevState => {
@@ -52,6 +53,14 @@ const GamePage = () => {
         return winerResult;
     }
 
+    const handleSetNewCard = (card) => {
+        setNewCard(card);
+    }
+
+    const handleGetNewCard = () => {
+        return newCard;
+    }
+
     return (
         <PokemonContext.Provider value={{
             pokemon: selectedPokemons,
@@ -61,7 +70,10 @@ const GamePage = () => {
             clean: cleanPokemons,
             winner: winerResult,
             setWiner: handleSetWiner,
-            getWiner: handleGetWiner
+            getWiner: handleGetWiner,
+            winCard: newCard,
+            getWinCard: handleGetNewCard,
+            setWinCard: handleSetNewCard
             
         }}>
             <Switch>

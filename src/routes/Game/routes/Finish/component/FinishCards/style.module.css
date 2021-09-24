@@ -17,3 +17,17 @@ button {
     flex-direction: row;
     justify-content: center;
 }
+
+.cardBoard.selected {
+    margin-top: -10px;
+}
+
+.cardBoard {
+    width: 100%;
+    max-width: 18vw;
+    height: 14.8vw;
+    margin-top: -6vw;
+}
+.cardBoard.first-child {
+    margin-top: 0;
+}
