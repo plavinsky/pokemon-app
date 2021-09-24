@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { useHistory } from "react-router";
 import { PokemonContext } from "../../../../context/pokemonContext";
-import PlayerBoard from "../Board/component/PlayerBoard";
+import FinishCards from "./component/FinishCards";
 import s from "./style.module.css";
 
 const FinishPage = (poks1,poks2) => {
@@ -11,7 +11,12 @@ const FinishPage = (poks1,poks2) => {
     console.log("finishPagePoks1:", pokemonContext);
     console.log("player2Pokemons:", pokemonContext.player2Pokemons);
 
+    console.log("finishPagePoks2:", Object.values({...pokemonContext.pokemon}));
 
+    console.log("pokemonContext.winer:", pokemonContext.winer)
+
+    if (pokemonContext.getWiner() === undefined )
+        history.replace("/game");
 
     function handleBackToStart() {
         pokemonContext.clean();
@@ -20,14 +25,15 @@ const FinishPage = (poks1,poks2) => {
 
     return (
         <div >
-            <PlayerBoard 
+            <FinishCards 
             player={1}
             cards={Object.values({...pokemonContext.pokemon})}
             />
 
-            <button onClick={handleBackToStart}>END GAME</button>
-
-            <PlayerBoard 
+            <div style={{justifyContent: "center", display: 'flex', marginTop: '10px', marginBottom: '10px'}}>
+                <button onClick={handleBackToStart} >END GAME</button>
+            </div>
+            <FinishCards 
             player={2}
             cards={Object.values({...pokemonContext.player2Pokemons})}
             />

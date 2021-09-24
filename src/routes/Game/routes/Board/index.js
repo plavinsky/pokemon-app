@@ -22,7 +22,7 @@ const counterWin = (board, player1, player2) => {
 
 
 const BoardPage = () => {
-    const {pokemon, onSetPlayer2} = useContext(PokemonContext);
+    let {pokemon, onSetPlayer2, setWiner, winer} = useContext(PokemonContext);
     const [board, setBoard] = useState([]);
     
     const [player1, setPlayer1] = useState(() => {
@@ -66,20 +66,27 @@ const BoardPage = () => {
 
     }, [])
 
+    const setWinerContext = (win) => {
+        setWiner(win);
+        winer = win;
+    }
+
     useEffect(() => {
         if (steps === 9)
         {
             const [count1, count2] = counterWin(board, player1, player2);
 
             if (count1 > count2)
-                console.log("WIN");
+                setWinerContext(1);//console.log("WIN");
 
             if (count1 < count2)
-                console.log("LOSE");
+              setWinerContext(2);//console.log("LOSE");
 
             if (count1 === count2)
-                console.log("DRAW");
+              setWinerContext(0);//console.log("DRAW");
 
+
+            
             history.push("/game/finish")
         }
         
