@@ -10,10 +10,10 @@ const counterWin = (board, player1, player2) => {
     let player2Counter = player2.length;
 
     board.forEach(item => {
-        if (item.card.posession === 'red')
+        if (item.card.possession === 'red')
             player2Counter++;
 
-        if (item.card.posession === 'blue')
+        if (item.card.possession === 'blue')
             player1Counter++;
     });
 
@@ -22,13 +22,13 @@ const counterWin = (board, player1, player2) => {
 
 
 const BoardPage = () => {
-    let {pokemon, pokemons1, pokemons2} = useContext(PokemonContext);
+    const {pokemon, onSetPlayer2} = useContext(PokemonContext);
     const [board, setBoard] = useState([]);
     
     const [player1, setPlayer1] = useState(() => {
         return Object.values(pokemon).map( item => ({
             ...item,
-            posession: 'blue',
+            possession: 'blue',
         }))
     });
     const [player2, setPlayer2] = useState([]);
@@ -46,20 +46,23 @@ const BoardPage = () => {
         const player2Response = await fetch("https://reactmarathon-api.netlify.app/api/create-player");
         const player2Request =  await player2Response.json();
 
-        console.log("p2_data:", player2Request.data);
         setPlayer2(
             () => {
-                return player2Request.data.map( item => ({
-                ...item,
-                posession: 'red',
-                }));
+                const res = player2Request.data.map( item => ({
+                    ...item,
+                    possession: 'red',
+                    }));
+                onSetPlayer2(res);
+                return res;
             }
         )
 
-        pokemons1 = {...player1};
-        pokemons2 = {...player2};
+        
+        
 
-        console.log("poks1:", pokemons1);
+        
+
+        
 
     }, [])
 
@@ -87,15 +90,15 @@ const BoardPage = () => {
     
 
     const handleClickBoardPlate = async (position) => {
-        console.log("##1:", position);
-        console.log("choice:", choiceCard);
-
+        
         if (choiceCard) {
             const params = {
                 position,
                 card: choiceCard,
                 board,
             }
+
+            console.log("params:", params);
 
             const res = await fetch('https://reactmarathon-api.netlify.app/api/players-turn', {
                 method: 'POST',
@@ -106,7 +109,7 @@ const BoardPage = () => {
             });
 
             const request = await res.json();
-            console.log("req#:", request);
+            //console.log("req#:", request);
             
 
             if (choiceCard.player === 1) {
@@ -141,7 +144,7 @@ const BoardPage = () => {
                         <div key={item.position} className={s.boardPlate}
                         onClick={() => !item.card && handleClickBoardPlate(item.position)}>
                             {
-                                item.card && <PokemonCard {...item.card} active minimize/>
+                                item.card && <PokemonCard key={item.position} {...item.card} active minimize/>
                             }
                         </div>
                     ))

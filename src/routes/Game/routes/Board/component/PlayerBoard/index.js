@@ -35,7 +35,7 @@ const PlayerBoard = ({cards, onClickCard, player}) => {
                         active={true} 
                         isSelected={item.selected}
                         minimize
-                        posession=""/>
+                        possession=""/>
                     </div>
                 ) )
             }
