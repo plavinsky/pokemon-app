@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import PokemonCard from '../../../../components/PokemonCard';
 import { PokemonContext } from '../../../../context/pokemonContext';
+import ArrowChoice from './component/ArrowChoice';
 import PlayerBoard from './component/PlayerBoard';
 import s from './style.module.css';
 
@@ -22,7 +23,7 @@ const counterWin = (board, player1, player2) => {
 
 
 const BoardPage = () => {
-    let {pokemon, onSetPlayer2, setWiner, winer} = useContext(PokemonContext);
+    let {pokemon, onSetPlayer2, setWiner, winer, getTurn, setTurn} = useContext(PokemonContext);
     const [board, setBoard] = useState([]);
     
     const [player1, setPlayer1] = useState(() => {
@@ -35,7 +36,7 @@ const BoardPage = () => {
     const [player2, setPlayer2] = useState([]);
     const [choiceCard, setChoiceCard] = useState(null);
     const [steps, setSteps] = useState(0);
-    const [yourTurn, setYourTurn] = useState(true);
+    
 
     const history = useHistory();
     
@@ -120,6 +121,9 @@ const BoardPage = () => {
             setBoard(request.data);
             setSteps(steps+1);
             setChoiceCard(null);
+
+            const turn = getTurn();
+            setTurn(turn === 1 ? 2 : 1)
         }
 
         
@@ -135,6 +139,9 @@ const BoardPage = () => {
                 onClickCard={(card) => setChoiceCard(card)}/>
             
             </div>
+
+            
+
             <div className={s.board}>
                 {
                     board.map(item => (
@@ -147,6 +154,8 @@ const BoardPage = () => {
                     ))
                 }
             </div>
+
+            <ArrowChoice side={getTurn()}/>
 
             <div className={s.playerTwo}>
             <PlayerBoard 

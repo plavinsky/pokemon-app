@@ -22,7 +22,6 @@ const PlayerBoard = ({cards, onClickCard, player}) => {
 
                             if (turn === player)
                             {
-                                pokemonContext.setTurn(turn === 1 ? 2 : 1)
                                 setSelected(item.id);
                                 onClickCard && onClickCard({
                                     player,
