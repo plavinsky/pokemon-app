@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import cn from "classnames";
 import PokemonCard from '../../../../../../components/PokemonCard';
 import s from './style.module.css';
+import { PokemonContext } from '../../../../../../context/pokemonContext';
 
 
 
 const PlayerBoard = ({cards, onClickCard, player}) => {
     const [isSelected,setSelected] = useState(null);
+    const pokemonContext = useContext(PokemonContext);
 
     return (
         <>
@@ -16,11 +18,18 @@ const PlayerBoard = ({cards, onClickCard, player}) => {
                     <div className={cn(s.cardBoard, 
                         {[s.selected]: isSelected === item.id})}
                         onClick={() => {
-                            setSelected(item.id);
-                            onClickCard && onClickCard({
-                                player,
-                                ...item})
-                        }}>
+                            const turn = pokemonContext.getTurn()
+
+                            if (turn === player)
+                            {
+                                pokemonContext.setTurn(turn === 1 ? 2 : 1)
+                                setSelected(item.id);
+                                onClickCard && onClickCard({
+                                    player,
+                                    ...item})
+                            }
+                        }}
+                        >
                         <PokemonCard
                         key={item.id} 
                         dbKey={item.id}

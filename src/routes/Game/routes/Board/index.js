@@ -31,9 +31,11 @@ const BoardPage = () => {
             possession: 'blue',
         }))
     });
+
     const [player2, setPlayer2] = useState([]);
     const [choiceCard, setChoiceCard] = useState(null);
     const [steps, setSteps] = useState(0);
+    const [yourTurn, setYourTurn] = useState(true);
 
     const history = useHistory();
     
@@ -57,13 +59,6 @@ const BoardPage = () => {
             }
         )
 
-        
-        
-
-        
-
-        
-
     }, [])
 
     const setWinerContext = (win) => {
@@ -84,9 +79,7 @@ const BoardPage = () => {
 
             if (count1 === count2)
               setWinerContext(0);//console.log("DRAW");
-
-
-            
+    
             history.push("/game/finish")
         }
         
@@ -105,7 +98,6 @@ const BoardPage = () => {
                 board,
             }
 
-            console.log("params:", params);
 
             const res = await fetch('https://reactmarathon-api.netlify.app/api/players-turn', {
                 method: 'POST',
@@ -115,9 +107,7 @@ const BoardPage = () => {
                 body: JSON.stringify(params),
             });
 
-            const request = await res.json();
-            //console.log("req#:", request);
-            
+            const request = await res.json();        
 
             if (choiceCard.player === 1) {
                 setPlayer1(prevState => prevState.filter(item => item.id !== choiceCard.id))
@@ -129,7 +119,7 @@ const BoardPage = () => {
 
             setBoard(request.data);
             setSteps(steps+1);
-
+            setChoiceCard(null);
         }
 
         
