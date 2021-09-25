@@ -8,9 +8,6 @@ import s from './style.module.css';
 const PlayerBoard = ({cards, onClickCard, player}) => {
     const [isSelected,setSelected] = useState(null);
 
-    console.log("cards:", cards);
-    //debugger;
-
     return (
         <>
             {

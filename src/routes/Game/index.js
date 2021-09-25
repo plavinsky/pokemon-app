@@ -32,9 +32,6 @@ const GamePage = () => {
     }
 
     const handleSetPlayer2 = (poks) => {
-        console.log("handleSetPlayer2:", poks)
-        console.log("handleSetPlayer2pokemon:", selectedPokemons)
-        
         setPlayer2Cards({...poks});
     }
 
@@ -44,9 +41,7 @@ const GamePage = () => {
     }
 
     const handleSetWiner = (winer) => {
-        console.log("setWinerResult", winer);
         setWinerResult(prevState => winer);
-        console.log("winerResult", winerResult);
     }
 
     const handleGetWiner = () => {

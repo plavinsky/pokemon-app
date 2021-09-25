@@ -60,18 +60,4 @@ class Firebase{
 
 
 
-// export function addPokemon(data) {
-  // const newKey = database.ref().child('pokemons').push().key;
-  // database.ref('pokemons/' + newKey).set(data[1]);
-
-  //return newKey;
-// }
-
-// export async function getPokemons(database) {
-//     const pokemonsCol = collection(database, 'pokemons');
-//     const pokemonsSnapshot = await getDocs(pokemonsCol);
-//     const pokemonsList = pokemonsSnapshot.docs.map(doc => doc.data());
-//     return pokemonsList;
-//   }
-
 export default Firebase;

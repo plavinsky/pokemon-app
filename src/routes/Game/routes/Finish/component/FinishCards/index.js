@@ -6,15 +6,6 @@ import cn from 'classnames';
 const FinishCards = ({cards, player, ifWiner, onClickNewCard}) => {
     const [isSelected,setSelected] = useState(null);
 
-
-    console.log("cards:",cards);
-    console.log("ifWiner:",ifWiner);
-    // return (
-    //     <>
-    //     </>
-    // );
-
-
     return (
         <div className={s.finishflex}>
             

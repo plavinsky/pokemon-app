@@ -24,10 +24,7 @@ const StartPage = ({onChangePage}) => {
 
     const handleAddPokemonClick = () => {
         const data = Object.entries(pokemons)[Math.round(Math.random()*(Object.entries(pokemons).length-1))];
-        // const newKey = addPokemon(data);
-        // pokemons[newKey] = data[1];
-        // setPokemons({...pokemons});
-        
+                
         firebase.addPokemon(data[1], async () => {
             //await getPokemons();
         })

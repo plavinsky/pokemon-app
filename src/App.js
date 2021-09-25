@@ -17,7 +17,6 @@ import Firebase from "./services/firebase";
 
 
 const App = () => {
-  //const match = useRouteMatch("/");
   const location = useLocation();
   const isPadding = location.pathname === "/" || location.pathname === "/game/board";
 

@@ -10,20 +10,11 @@ const FinishPage = (poks1,poks2) => {
     const pokemonContext = useContext(PokemonContext);
     const firebase = useContext(FireBaseContext);
 
-    console.log("finishPagePoks1:", pokemonContext);
-    console.log("player2Pokemons:", pokemonContext.player2Pokemons);
-
-    console.log("finishPagePoks2:", Object.values({...pokemonContext.pokemon}));
-
-    console.log("pokemonContext.winer:", pokemonContext.winer)
-
     if (pokemonContext.getWiner() === undefined )
         history.replace("/game");
 
     function handleBackToStart() {
         pokemonContext.clean(); 
-        //addCard
-        //console.log("card2Add:", pokemonContext.getWinCard());
         firebase.addPokemon(pokemonContext.getWinCard(), async () => {
             history.push('/game/');
         })

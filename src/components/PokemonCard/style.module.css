@@ -40,6 +40,10 @@
     margin-top: -20px;
     margin-bottom: 20px;
 }
+.pokemonCard.selectWiner {
+    margin-top: -20px;
+    margin-bottom: 20px;
+}
 
 .cardFront,
 .cardBack {
