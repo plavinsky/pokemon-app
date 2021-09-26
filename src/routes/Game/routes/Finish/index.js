@@ -15,11 +15,13 @@ const FinishPage = (poks1,poks2) => {
 
     function handleBackToStart() {
         pokemonContext.clean(); 
-        firebase.addPokemon(pokemonContext.getWinCard(), async () => {
-            history.push('/game/');
-        })
 
-        
+        if (pokemonContext.getWinCard())
+            firebase.addPokemon(pokemonContext.getWinCard(), async () => {
+                history.push('/game/');
+            }) 
+        else 
+            history.push('/game/');
     }
 
     const handleClickNewCard = (card) => {
@@ -27,33 +29,31 @@ const FinishPage = (poks1,poks2) => {
     }
 
     return (
-           <div>
-            
-            <div style={{justifyContent: "center", display: 'flex', marginTop: '10px', marginBottom: '10px'}}>
-            <h1>Your game cards:</h1>    
+           <>
+                <div style={{justifyContent: "center", display: 'flex', marginTop: '10px', marginBottom: '10px'}}>
+                    <h1>Your game cards:</h1>    
                 </div> 
 
-            <FinishCards 
-            player={1}
-            cards={Object.values({...pokemonContext.pokemon})}
-            />
+                <FinishCards 
+                    player={1}
+                    cards={Object.values({...pokemonContext.pokemon})}
+                />
 
-            <div style={{justifyContent: "center", display: 'flex', marginTop: '10px', marginBottom: '10px'}}>
-                <button onClick={handleBackToStart} >END GAME</button>
-            </div>
+                <div style={{justifyContent: "center", display: 'flex', marginTop: '10px', marginBottom: '10px'}}>
+                    <button onClick={handleBackToStart} >END GAME</button>
+                </div>
 
-            <div style={{justifyContent: "center", display: 'flex', marginTop: '10px', marginBottom: '10px'}}>
-            <h1>{(pokemonContext.getWiner() === 1) ? "You Win - Choose 1 card:" : "You lose, end game and try again!"}</h1>    
+                <div style={{justifyContent: "center", display: 'flex', marginTop: '10px', marginBottom: '10px'}}>
+                    <h1>{(pokemonContext.getWiner() === 1) ? "You Win - Choose 1 card:" : "You lose, end game and try again!"}</h1>    
                 </div> 
-            
-            <FinishCards 
-            player={2}
-            cards={Object.values({...pokemonContext.player2Pokemons})}
-            ifWiner={pokemonContext.getWiner() === 1}
-            onClickNewCard={handleClickNewCard}
-            />
-            
-        </div>
+                
+                <FinishCards 
+                    player={2}
+                    cards={Object.values({...pokemonContext.player2Pokemons})}
+                    ifWiner={pokemonContext.getWiner() === 1}
+                    onClickNewCard={handleClickNewCard}
+                />
+            </>
     );
 
 }
