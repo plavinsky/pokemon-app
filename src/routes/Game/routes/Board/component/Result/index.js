@@ -1,8 +1,8 @@
 import {useState, useEffect} from 'react';
 import s from './style.module.css';
-import YouWin from '../../assets/you-win.png';
-import YouLose from '../../assets/you-lose.png';
-import Draw from '../../assets/draw.png';
+import YouWin from './assets/you-win.png';
+import YouLose from './assets/you-lose.png';
+import Draw from './assets/draw.png';
 
 const Result = ({ type }) => {
    const [url, setUrl] = useState(null);
@@ -19,7 +19,7 @@ const Result = ({ type }) => {
                setUrl(Draw);
                break;
            default:
-               setUrl(YouWin);
+               setUrl(null);
        }
    }, [type]);
 

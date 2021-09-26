@@ -4,6 +4,8 @@ import PokemonCard from '../../../../components/PokemonCard';
 import { PokemonContext } from '../../../../context/pokemonContext';
 import ArrowChoice from './component/ArrowChoice';
 import PlayerBoard from './component/PlayerBoard';
+import Result from './component/Result';
+
 import s from './style.module.css';
 
 const counterWin = (board, player1, player2) => {
@@ -36,6 +38,7 @@ const BoardPage = () => {
     const [player2, setPlayer2] = useState([]);
     const [choiceCard, setChoiceCard] = useState(null);
     const [steps, setSteps] = useState(0);
+    const [result, setResult] = useState(null);
     
 
     const history = useHistory();
@@ -68,21 +71,44 @@ const BoardPage = () => {
     }
 
     useEffect(() => {
-        if (steps === 9)
-        {
-            const [count1, count2] = counterWin(board, player1, player2);
+        async function getFullResult() {
+            
+            if (steps === 9)
+            {
+                const [count1, count2] = counterWin(board, player1, player2);
+                let caption = "";
 
-            if (count1 > count2)
-                setWinerContext(1);//console.log("WIN");
+                if (count1 > count2)
+                {
+                    setWinerContext(1);//console.log("WIN");
+                    caption = 'win';
+                }
+                if (count1 < count2)
+                {
+                    setWinerContext(2);//console.log("LOSE");
+                    caption = 'lose';
+                }
+                if (count1 === count2)  
+                {
+                    setWinerContext(0);//console.log("DRAW");
+                    caption = 'draw';
+                }
 
-            if (count1 < count2)
-              setWinerContext(2);//console.log("LOSE");
+                setResult(caption);
 
-            if (count1 === count2)
-              setWinerContext(0);//console.log("DRAW");
-    
-            history.push("/game/finish")
-        }
+                function sleep(ms) {
+                    return new Promise(resolve => setTimeout(resolve, ms));
+                }
+
+                await sleep(4000);              
+        
+                history.push("/game/finish")
+            }
+        };
+
+
+        getFullResult();
+        
         
     }, [steps]);
 
@@ -131,6 +157,9 @@ const BoardPage = () => {
 
     return (
         <div className={s.root}>
+            
+            <Result type={result}/>
+
             <div className={s.playerOne}>
 
             <PlayerBoard 
