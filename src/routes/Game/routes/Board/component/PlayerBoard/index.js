@@ -22,6 +22,7 @@ const PlayerBoard = ({cards, onClickCard, player}) => {
 
                             if (turn === player)
                             {
+                                console.log(item.id);
                                 setSelected(item.id);
                                 onClickCard && onClickCard({
                                     player,
