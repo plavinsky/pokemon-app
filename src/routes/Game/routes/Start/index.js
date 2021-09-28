@@ -4,23 +4,27 @@ import s from './style.module.css';
 import { FireBaseContext } from "../../../../context/firebaseContext";
 import { PokemonContext } from "../../../../context/pokemonContext";
 import { useHistory } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import {getPokemonAsync, getPokemons, selectPokemonsData, selectPokemonsLoading} from "../../../../store/pokemons"
 
 const StartPage = ({onChangePage}) => {
     const firebase = useContext(FireBaseContext);
     const pokemonsContext = useContext(PokemonContext);
+    const isLoading = useSelector(selectPokemonsLoading);
+    const pokemonsRedux = useSelector(selectPokemonsData);
+    const dispatch = useDispatch();
     const history = useHistory();
-
     const [pokemons, setPokemons] = useState({});
     
     useEffect(() => {
-        firebase.getPokemonSocket((pokemons) => {
-            setPokemons(pokemons);
-        })
-
-        return () => firebase.offPokemonSocket();
+        
+        dispatch(getPokemonAsync());
     }, []);
 
-    
+    useEffect(() => {
+        setPokemons(pokemonsRedux);
+    }, [pokemonsRedux])
+
 
     const handleAddPokemonClick = () => {
         const data = Object.entries(pokemons)[Math.round(Math.random()*(Object.entries(pokemons).length-1))];

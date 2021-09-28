@@ -1,7 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import PokemonCard from '../../../../components/PokemonCard';
 import { PokemonContext } from '../../../../context/pokemonContext';
+import { selectTurn, selectWiner, selectPlayer2pokemons, setPlayer2pokemons, setWiner, setTurn} from '../../../../store/player2pokemons';
 import ArrowChoice from './component/ArrowChoice';
 import PlayerBoard from './component/PlayerBoard';
 import Result from './component/Result';
@@ -25,7 +27,7 @@ const counterWin = (board, player1, player2) => {
 
 
 const BoardPage = () => {
-    let {pokemon, onSetPlayer2, setWiner, winer, getTurn, setTurn} = useContext(PokemonContext);
+    let {pokemon, onSetPlayer2, winer} = useContext(PokemonContext);
     const [board, setBoard] = useState([]);
     
     const [player1, setPlayer1] = useState(() => {
@@ -39,10 +41,40 @@ const BoardPage = () => {
     const [choiceCard, setChoiceCard] = useState(null);
     const [steps, setSteps] = useState(0);
     const [result, setResult] = useState(null);
+    const player2pokemonsRedux = useSelector(selectPlayer2pokemons);
+    const turnRedux = useSelector(selectTurn);
+    const [stateTurn, setStateTurn] = useState(1);
+    const winerRedux = useSelector(selectWiner);
+    
+    const dispatch = useDispatch();
     
 
     const history = useHistory();
-    
+
+    let turn = turnRedux;
+        if (turn === undefined)
+            {
+                turn = Math.floor(Math.random()*2)+1;
+                dispatch(setTurn(turn));
+
+            }
+
+    useEffect(() => {
+        //console.log("player2pokemonsRedux:", player2pokemonsRedux);
+        setPlayer2(() => Object.values(player2pokemonsRedux));
+    },[player2pokemonsRedux]);
+
+    useEffect(() => {
+        let turn = turnRedux;
+        if (turn === undefined)
+            {
+                turn = Math.floor(Math.random()*2)+1;
+                dispatch(setTurn(turn));
+
+            }
+        setStateTurn(turn);
+        console.log("stateTurn:", stateTurn);
+    }, [turnRedux]);
 
     useEffect(async () => {
         const boardResponse = await fetch("https://reactmarathon-api.netlify.app/api/board");
@@ -58,7 +90,9 @@ const BoardPage = () => {
                     ...item,
                     possession: 'red',
                     }));
-                onSetPlayer2(res);
+                //onSetPlayer2(res);
+                console.log("res1:", res);
+                dispatch(setPlayer2pokemons(Object.values(res)));
                 return res;
             }
         )
@@ -66,7 +100,8 @@ const BoardPage = () => {
     }, [])
 
     const setWinerContext = (win) => {
-        setWiner(win);
+        dispatch(setWiner(win));
+        //setWiner(win);
         winer = win;
     }
 
@@ -111,6 +146,7 @@ const BoardPage = () => {
         
         
     }, [steps]);
+    
 
     if (Object.values(pokemon).length < 5)
         history.replace("/game");
@@ -161,8 +197,19 @@ const BoardPage = () => {
             setSteps(steps+1);
             setChoiceCard(null);
 
-            const turn = getTurn();
-            setTurn(turn === 1 ? 2 : 1)
+            //const turn = getTurn();
+            //setTurn(turn === 1 ? 2 : 1)
+            let turn = turnRedux;
+            console.log("turn = turnRedux1", turn);
+            // if (turn === undefined)
+            // {
+            //     turn = Math.floor(Math.random()*2)+1;
+            //     dispatch(setTurn(turn));
+
+            // }
+            // console.log("turn = turnRedux2", turn);
+            dispatch(setTurn(turn === 1 ? 2 : 1));
+            
         }
 
         
@@ -178,6 +225,7 @@ const BoardPage = () => {
             <PlayerBoard 
                 player={1}
                 cards={player1} 
+                turnPlayer={stateTurn}
                 onClickCard={(card) => setChoiceCard(card)}/>
             
             </div>
@@ -197,12 +245,13 @@ const BoardPage = () => {
                 }
             </div>
 
-            <ArrowChoice side={getTurn()}/>
+            <ArrowChoice side={stateTurn}/>
 
             <div className={s.playerTwo}>
             <PlayerBoard 
                 player={2}
                 cards={player2} 
+                turnPlayer={stateTurn}
                 onClickCard={(card) => setChoiceCard(card)}/>
             
             </div>

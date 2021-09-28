@@ -6,9 +6,9 @@ const Header = ({title=null, descr=null, onGameClick}) => {
     const history = useHistory();
 
     const handleGameClick = () => {
-        history.push('game');
+        //history.push('game');
 
-        //onGameClick && onGameClick();
+        onGameClick && onGameClick();
     }
     
     return (

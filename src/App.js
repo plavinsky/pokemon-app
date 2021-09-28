@@ -13,6 +13,7 @@ import cn from "classnames";
 import s from "./style.module.css";
 import { FireBaseContext } from "./context/firebaseContext";
 import Firebase from "./services/firebase";
+import FirebaseClass from "./services/firebase";
 
 
 
@@ -22,7 +23,7 @@ const App = () => {
 
   
   return (
-        <FireBaseContext.Provider  value={new Firebase()}>
+        <FireBaseContext.Provider  value={FirebaseClass}>
           <Switch>
             <Route>
               <>

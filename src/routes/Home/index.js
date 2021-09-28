@@ -8,13 +8,25 @@ import BGIMage1 from '../../assets/bg1.jpeg';
 import BGIMage3 from '../../assets/bg3.jpeg';
 
 import POKEMONS from '../../data/pokemons.json';
+import { useDispatch, useSelector } from 'react-redux';
+import {plusAction, selectCount} from "../../store/pokemonsStore";
+import { useHistory } from 'react-router';
 
 
 
 function HomePage ({onChangePage}) {
-  
+    const history = useHistory();
+    const count = useSelector(selectCount);
+    const dispatch = useDispatch();
+
+    //console.log("sdfdsf");
+
     const handleGameClick = () => {
-        onChangePage && onChangePage('game');
+        //dispatch(plusAction(1));
+        //console.log(count);
+      //onChangePage && onChangePage('game');
+
+      history.push('game');
     }
 
   return (
