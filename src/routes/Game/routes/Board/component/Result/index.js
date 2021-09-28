@@ -23,6 +23,7 @@ const Result = ({ type }) => {
        }
    }, [type]);
 
+   
     return (
         <div className={s.result}>
             <img src={url} alt="result" />
