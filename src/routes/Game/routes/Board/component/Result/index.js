@@ -19,7 +19,7 @@ const Result = ({ type }) => {
                setUrl(Draw);
                break;
            default:
-               setUrl(null);
+               setUrl("");
        }
    }, [type]);
 

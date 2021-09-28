@@ -119,10 +119,13 @@ const BoardPage = () => {
     const handleClickBoardPlate = async (position) => {
         
         const isDublicate = board.some(({card}) => {
-            return (
-                card.id === choiceCard.id &&
-                card.possession === choiceCard.possession
-            )
+            if (card && card.id && choiceCard && choiceCard.id)
+                return (
+                    card.id === choiceCard.id &&
+                    card.possession === choiceCard.possession
+                )
+            else
+                return false;
         });
 
         if (isDublicate) return;
