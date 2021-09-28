@@ -7,7 +7,7 @@ import AboutPage from "./routes/About";
 import ContactPage from "./routes/Contact";
 import NotFound from "./routes/404";
 
-import { useRouteMatch, Route, Switch, useLocation} from "react-router-dom";
+import { Route, Switch, useLocation} from "react-router-dom";
 import cn from "classnames";
 
 import s from "./style.module.css";
@@ -17,7 +17,6 @@ import Firebase from "./services/firebase";
 
 
 const App = () => {
-  const match = useRouteMatch("/");
   const location = useLocation();
   const isPadding = location.pathname === "/" || location.pathname === "/game/board";
 

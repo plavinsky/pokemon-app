@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from "react";
-import {database, addPokemon} from "../../../../services/firebase";
 import PokemonCard from "../../../../components/PokemonCard";
 import s from './style.module.css';
 import { FireBaseContext } from "../../../../context/firebaseContext";
@@ -10,10 +9,8 @@ const StartPage = ({onChangePage}) => {
     const firebase = useContext(FireBaseContext);
     const pokemonsContext = useContext(PokemonContext);
     const history = useHistory();
-    console.log("###:", pokemonsContext);
 
     const [pokemons, setPokemons] = useState({});
-    const [dbChange, setDbChange] = useState(false);
     
     useEffect(() => {
         firebase.getPokemonSocket((pokemons) => {
@@ -27,10 +24,7 @@ const StartPage = ({onChangePage}) => {
 
     const handleAddPokemonClick = () => {
         const data = Object.entries(pokemons)[Math.round(Math.random()*(Object.entries(pokemons).length-1))];
-        // const newKey = addPokemon(data);
-        // pokemons[newKey] = data[1];
-        // setPokemons({...pokemons});
-        
+                
         firebase.addPokemon(data[1], async () => {
             //await getPokemons();
         })
