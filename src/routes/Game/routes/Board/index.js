@@ -2,8 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import PokemonCard from '../../../../components/PokemonCard';
-import { PokemonContext } from '../../../../context/pokemonContext';
-import { selectTurn, selectWiner, selectPlayer2pokemons, setPlayer2pokemons, setWiner, setTurn} from '../../../../store/player2pokemons';
+import {selectGame, gameMethods} from "../../../../store/game";
 import ArrowChoice from './component/ArrowChoice';
 import PlayerBoard from './component/PlayerBoard';
 import Result from './component/Result';
@@ -25,33 +24,17 @@ const counterWin = (board, player1, player2) => {
     return [player1Counter, player2Counter];
 }
 
-
 const BoardPage = () => {
-    let {pokemon, onSetPlayer2, winer} = useContext(PokemonContext);
     const [board, setBoard] = useState([]);
-    
-    const [player1, setPlayer1] = useState(() => {
-        return Object.values(pokemon).map( item => ({
-            ...item,
-            possession: 'blue',
-        }))
-    });
-
-    const [player2, setPlayer2] = useState([]);
     const [choiceCard, setChoiceCard] = useState(null);
     const [steps, setSteps] = useState(0);
     const [result, setResult] = useState(null);
-    const player2pokemonsRedux = useSelector(selectPlayer2pokemons);
-    //const turnRedux = useSelector(selectTurn);
-    const [stateTurn, setStateTurn] = useState(1);
-    const winerRedux = useSelector(selectWiner);
-    
+    const gameRedux = useSelector(selectGame);
+    const [player1, setPlayer1] = useState(() => Object.values(gameRedux.player1).map(item=>({...item, possession:'blue'})));
+    const [player2, setPlayer2] = useState([]);
+    const [stateTurn, setStateTurn] = useState(1);    
     const dispatch = useDispatch();
-    
-
     const history = useHistory();
-
-
 
     let turn = stateTurn;
         if (turn === undefined)
@@ -61,25 +44,6 @@ const BoardPage = () => {
 
             }
 
-    useEffect(() => {
-        console.log("player2pokemonsRedux:", player2pokemonsRedux);
-        if (player2pokemonsRedux)
-            setPlayer2(() => Object.values(player2pokemonsRedux.data));
-    },[player2pokemonsRedux]);
-
-    // useEffect(() => {
-    //     let turn = turnRedux;
-    //     if (turn === undefined)
-    //         {
-    //             turn = Math.floor(Math.random()*2)+1;
-    //             setStateTurn(turn);
-
-    //         }
-        
-    //     setStateTurn(turn);
-    //     console.log("stateTurn:", stateTurn);
-    // }, [turnRedux]);
-
     useEffect(async () => {
         const boardResponse = await fetch("https://reactmarathon-api.netlify.app/api/board");
         const boardRequest = await boardResponse.json();
@@ -88,30 +52,18 @@ const BoardPage = () => {
         const player2Response = await fetch("https://reactmarathon-api.netlify.app/api/create-player");
         const player2Request =  await player2Response.json();
 
-        setPlayer2(
-            () => {
-                const res = player2Request.data.map( item => ({
-                    ...item,
-                    possession: 'red',
-                    }));
-                //onSetPlayer2(res);
-                console.log("res1:", res);
-                dispatch(setPlayer2pokemons(Object.values(res)));
-                return res;
-            }
-        )
-
+        const res = player2Request.data.map( item => ({
+            ...item,
+            possession: 'red',
+            }));
+        
+        dispatch(gameMethods.player2Set(player2Request.data.map(item=>({...item}))));
+        setPlayer2(res);
     }, [])
 
-    const setWinerContext = (win) => {
-        dispatch(setWiner(win));
-        //setWiner(win);
-        winer = win;
-    }
 
     useEffect(() => {
         async function getFullResult() {
-            
             if (steps === 9)
             {
                 const [count1, count2] = counterWin(board, player1, player2);
@@ -119,40 +71,33 @@ const BoardPage = () => {
 
                 if (count1 > count2)
                 {
-                    setWinerContext(1);//console.log("WIN");
+                    dispatch(gameMethods.setWinner(1));
                     caption = 'win';
                 }
                 if (count1 < count2)
                 {
-                    setWinerContext(2);//console.log("LOSE");
+                    dispatch(gameMethods.setWinner(2));
                     caption = 'lose';
                 }
                 if (count1 === count2)  
                 {
-                    setWinerContext(0);//console.log("DRAW");
+                    dispatch(gameMethods.setWinner(2));
                     caption = 'draw';
                 }
 
                 setResult(caption);
-
                 function sleep(ms) {
                     return new Promise(resolve => setTimeout(resolve, ms));
                 }
-
                 await sleep(4000);              
-        
                 history.push("/game/finish")
             }
         };
-
-
         getFullResult();
-        
-        
     }, [steps]);
     
 
-    if (Object.values(pokemon).length < 5)
+    if (Object.values(gameRedux.player1).length < 5)
         history.replace("/game");
     
 
@@ -170,14 +115,12 @@ const BoardPage = () => {
 
         if (isDublicate) return;
 
-
         if (choiceCard) {
             const params = {
                 position,
                 card: choiceCard,
                 board,
             }
-
 
             const res = await fetch('https://reactmarathon-api.netlify.app/api/players-turn', {
                 method: 'POST',
@@ -200,22 +143,7 @@ const BoardPage = () => {
             setBoard(request.data);
             setSteps(steps+1);
             setChoiceCard(null);
-
-            //const turn = getTurn();
-            //setTurn(turn === 1 ? 2 : 1)
-            // let turn = turnRedux;
-            // console.log("turn = turnRedux1", turn);
-            // if (turn === undefined)
-            // {
-            //     turn = Math.floor(Math.random()*2)+1;
-            //     dispatch(setTurn(turn));
-
-            // }
-            // console.log("turn = turnRedux2", turn);
-            //dispatch(setTurn();
             setStateTurn(turn === 1 ? 2 : 1);
-            
-            
         }
 
         
@@ -223,21 +151,14 @@ const BoardPage = () => {
 
     return (
         <div className={s.root}>
-            
             <Result type={result}/>
-
             <div className={s.playerOne}>
-
             <PlayerBoard 
                 player={1}
                 cards={player1} 
                 turnPlayer={stateTurn}
                 onClickCard={(card) => setChoiceCard(card)}/>
-            
             </div>
-
-            
-
             <div className={s.board}>
                 {
                     board.map(item => (
@@ -250,16 +171,13 @@ const BoardPage = () => {
                     ))
                 }
             </div>
-
             <ArrowChoice side={stateTurn}/>
-
             <div className={s.playerTwo}>
             <PlayerBoard 
                 player={2}
                 cards={player2} 
                 turnPlayer={stateTurn}
                 onClickCard={(card) => setChoiceCard(card)}/>
-            
             </div>
         </div>
     )
