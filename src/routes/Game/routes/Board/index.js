@@ -42,7 +42,7 @@ const BoardPage = () => {
     const [steps, setSteps] = useState(0);
     const [result, setResult] = useState(null);
     const player2pokemonsRedux = useSelector(selectPlayer2pokemons);
-    const turnRedux = useSelector(selectTurn);
+    //const turnRedux = useSelector(selectTurn);
     const [stateTurn, setStateTurn] = useState(1);
     const winerRedux = useSelector(selectWiner);
     
@@ -51,30 +51,34 @@ const BoardPage = () => {
 
     const history = useHistory();
 
-    let turn = turnRedux;
+
+
+    let turn = stateTurn;
         if (turn === undefined)
             {
                 turn = Math.floor(Math.random()*2)+1;
-                dispatch(setTurn(turn));
+                setStateTurn(turn);
 
             }
 
     useEffect(() => {
-        //console.log("player2pokemonsRedux:", player2pokemonsRedux);
-        setPlayer2(() => Object.values(player2pokemonsRedux));
+        console.log("player2pokemonsRedux:", player2pokemonsRedux);
+        if (player2pokemonsRedux)
+            setPlayer2(() => Object.values(player2pokemonsRedux.data));
     },[player2pokemonsRedux]);
 
-    useEffect(() => {
-        let turn = turnRedux;
-        if (turn === undefined)
-            {
-                turn = Math.floor(Math.random()*2)+1;
-                dispatch(setTurn(turn));
+    // useEffect(() => {
+    //     let turn = turnRedux;
+    //     if (turn === undefined)
+    //         {
+    //             turn = Math.floor(Math.random()*2)+1;
+    //             setStateTurn(turn);
 
-            }
-        setStateTurn(turn);
-        console.log("stateTurn:", stateTurn);
-    }, [turnRedux]);
+    //         }
+        
+    //     setStateTurn(turn);
+    //     console.log("stateTurn:", stateTurn);
+    // }, [turnRedux]);
 
     useEffect(async () => {
         const boardResponse = await fetch("https://reactmarathon-api.netlify.app/api/board");
@@ -199,8 +203,8 @@ const BoardPage = () => {
 
             //const turn = getTurn();
             //setTurn(turn === 1 ? 2 : 1)
-            let turn = turnRedux;
-            console.log("turn = turnRedux1", turn);
+            // let turn = turnRedux;
+            // console.log("turn = turnRedux1", turn);
             // if (turn === undefined)
             // {
             //     turn = Math.floor(Math.random()*2)+1;
@@ -208,7 +212,9 @@ const BoardPage = () => {
 
             // }
             // console.log("turn = turnRedux2", turn);
-            dispatch(setTurn(turn === 1 ? 2 : 1));
+            //dispatch(setTurn();
+            setStateTurn(turn === 1 ? 2 : 1);
+            
             
         }
 

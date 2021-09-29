@@ -31,7 +31,7 @@ export const slice = createSlice({
         data: {},
         error: null,
     },
-    reducers: {
+    reducers: { 
         
         setPlayer2pokemons: (state, action) => ({
             ...state,
@@ -50,13 +50,16 @@ export const slice = createSlice({
     }
 })
 
+//export const selectPlayer2pokemons = state => state.pokemons.data;
+export const selectPlayer2pokemons = state => state.player2pokemons;
+
 
 export const {setPlayer2pokemons,setWiner,setTurn} = slice.actions;
 
-export const selectPokemonsLoading = state => state.pokemons.isLoading;
-export const selectPlayer2pokemons = state => state.pokemons.data;
-export const selectWiner = state => state.pokemons.winer;
-export const selectTurn = state => state.pokemons.turn;
+//export const selectPokemonsLoading = state => state.isLoading;
+
+export const selectWiner = state => state.winer;
+export const selectTurn = state => state.turn;
 
 // export const getPokemonAsync = () => async dispatch => {
 //     dispatch(fetchPokemons);
