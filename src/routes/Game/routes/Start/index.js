@@ -23,6 +23,7 @@ const StartPage = ({onChangePage}) => {
 
     useEffect(() => {
         dispatch(getPokemonAsync());
+        dispatch(gameMethods.clean());
     }, []);
 
     useEffect(() => {

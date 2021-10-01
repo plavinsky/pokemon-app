@@ -11,7 +11,7 @@ import App from "./App"
 import './index.css'
 // const store = createStore(rootReducer);
 // console.log('### Store', store.getState());
-store.subscribe(() => console.log("### store subscribed:", store.getState().counter.count));
+//store.subscribe(() => console.log("### store subscribed:", store.getState().counter.count));
 
 // store.dispatch(plusAction(5));
 // store.dispatch(plusAction(3));

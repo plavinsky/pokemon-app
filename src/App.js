@@ -23,7 +23,7 @@ const App = () => {
 
   
   return (
-        <FireBaseContext.Provider  value={FirebaseClass}>
+        // <FireBaseContext.Provider  value={FirebaseClass}>
           <Switch>
             <Route>
               <>
@@ -46,7 +46,7 @@ const App = () => {
             <Route component={NotFound} />
 
           </Switch>
-        </FireBaseContext.Provider>
+        // </FireBaseContext.Provider>
   )
 
 

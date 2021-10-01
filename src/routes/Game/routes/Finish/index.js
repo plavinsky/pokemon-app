@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { FireBaseContext } from "../../../../context/firebaseContext";
+import FirebaseClass from "../../../../services/firebase";
 import { selectGame, gameMethods} from "../../../../store/game";
 import FinishCards from "./component/FinishCards";
 import s from "./style.module.css";
@@ -10,24 +11,22 @@ import s from "./style.module.css";
 const FinishPage = (poks1,poks2) => {
     const history = useHistory();
     
-    const firebase = useContext(FireBaseContext);
     const gameRedux = useSelector(selectGame);
     const dispatch = useDispatch();
     let newCard;
 
     console.log("Finish");
+    
 
     if (gameRedux.winner != 1)
     {
-        history.replace("/game");
         dispatch(gameMethods.clean());
+        history.replace("/game");
     }
 
     function handleBackToStart() {
-        dispatch(gameMethods.clean());
-
         if (newCard)
-            firebase.addPokemon(newCard, async () => {
+            FirebaseClass.addPokemon(newCard, async () => {
                 history.push('/game/');
             }) 
         else 
