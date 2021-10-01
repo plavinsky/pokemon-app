@@ -1,23 +1,29 @@
-import { useContext } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
-import { FireBaseContext } from "../../../../context/firebaseContext";
-import { PokemonContext } from "../../../../context/pokemonContext";
+import FirebaseClass from "../../../../services/firebase";
+import { selectGame, gameMethods} from "../../../../store/game";
 import FinishCards from "./component/FinishCards";
 
 
 const FinishPage = (poks1,poks2) => {
     const history = useHistory();
-    const pokemonContext = useContext(PokemonContext);
-    const firebase = useContext(FireBaseContext);
+    
+    const gameRedux = useSelector(selectGame);
+    const dispatch = useDispatch();
+    let newCard;
 
-    if (pokemonContext.getWiner() === undefined )
+    console.log("Finish");
+    
+
+    if (gameRedux.winner != 1)
+    {
+        dispatch(gameMethods.clean());
         history.replace("/game");
+    }
 
     function handleBackToStart() {
-        pokemonContext.clean(); 
-
-        if (pokemonContext.getWinCard())
-            firebase.addPokemon(pokemonContext.getWinCard(), async () => {
+        if (newCard)
+            FirebaseClass.addPokemon(newCard, async () => {
                 history.push('/game/');
             }) 
         else 
@@ -25,7 +31,11 @@ const FinishPage = (poks1,poks2) => {
     }
 
     const handleClickNewCard = (card) => {
-        pokemonContext.setWinCard(card);
+        newCard = card
+    }
+
+    const getWiner = () => {
+        return (gameRedux.winner === 1);
     }
 
     return (
@@ -36,7 +46,7 @@ const FinishPage = (poks1,poks2) => {
 
                 <FinishCards 
                     player={1}
-                    cards={Object.values({...pokemonContext.pokemon})}
+                    cards={Object.values({...gameRedux.player1})}
                 />
 
                 <div style={{justifyContent: "center", display: 'flex', marginTop: '10px', marginBottom: '10px'}}>
@@ -44,13 +54,13 @@ const FinishPage = (poks1,poks2) => {
                 </div>
 
                 <div style={{justifyContent: "center", display: 'flex', marginTop: '10px', marginBottom: '10px'}}>
-                    <h1>{(pokemonContext.getWiner() === 1) ? "You Win - Choose 1 card:" : "You lose, end game and try again!"}</h1>    
+                    <h1>{(gameRedux.winer === 1) ? "You Win - Choose 1 card:" : "You lose, end game and try again!"}</h1>    
                 </div> 
                 
                 <FinishCards 
                     player={2}
-                    cards={Object.values({...pokemonContext.player2Pokemons})}
-                    ifWiner={pokemonContext.getWiner() === 1}
+                    cards={Object.values({...gameRedux.player2})}
+                    ifWiner={getWiner()}
                     onClickNewCard={handleClickNewCard}
                 />
             </>

@@ -4,29 +4,36 @@ import s from './style.module.css';
 import { FireBaseContext } from "../../../../context/firebaseContext";
 import { PokemonContext } from "../../../../context/pokemonContext";
 import { useHistory } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import {getPokemonAsync, getPokemons, selectPokemonsData, selectPokemonsLoading} from "../../../../store/pokemons";
+import {gameMethods, selectGame} from "../../../../store/game";
 
 const StartPage = ({onChangePage}) => {
     const firebase = useContext(FireBaseContext);
     const pokemonsContext = useContext(PokemonContext);
+    const isLoading = useSelector(selectPokemonsLoading);
+    const pokemonsRedux = useSelector(selectPokemonsData);
+    const dispatch = useDispatch();
     const history = useHistory();
-
     const [pokemons, setPokemons] = useState({});
+    const gameRedux = useSelector(selectGame);
     
     useEffect(() => {
-        firebase.getPokemonSocket((pokemons) => {
-            setPokemons(pokemons);
-        })
-
-        return () => firebase.offPokemonSocket();
+        dispatch(getPokemonAsync());
+        dispatch(gameMethods.clean());
     }, []);
 
-    
+    useEffect(() => {
+        console.log("useEffect")
+        setPokemons(pokemonsRedux);
+    }, [pokemonsRedux]);
+
 
     const handleAddPokemonClick = () => {
         const data = Object.entries(pokemons)[Math.round(Math.random()*(Object.entries(pokemons).length-1))];
                 
         firebase.addPokemon(data[1], async () => {
-            //await getPokemons();
+            //await getPokemons(); 
         })
 
     }
@@ -35,15 +42,15 @@ const StartPage = ({onChangePage}) => {
         history.push('/game/board')
     }
 
-    const handleCardClick = (key) => {
-        const pokemon = {...pokemons[key]};
-        pokemonsContext.onSelectedPokemon(key, pokemon);
+    const handleCardClick = (keyID) => {
+        const pokemon = {...pokemons[keyID]};
+        dispatch(gameMethods.onPokemonAdd({ key : keyID, value : pokemon}));
 
         setPokemons(prevState => ({
                 ...prevState,
-                [key]: {
-                    ...prevState[key],
-                    selected: !prevState[key].selected
+                [keyID]: {
+                    ...prevState[keyID],
+                    selected: !prevState[keyID].selected
                 }
             }))
             
@@ -56,7 +63,7 @@ const StartPage = ({onChangePage}) => {
             <button onClick={handleAddPokemonClick}>ADD NEW POKEMON</button>
             <button 
                 onClick={handleStartGame}
-                disabled={Object.keys(pokemonsContext.pokemon).length < 5}>START GAME</button>
+                disabled={gameRedux && gameRedux.player1 && (Object.keys(gameRedux.player1).length < 5)}>START GAME</button>
         </div>
 
         <div className={s.flex} >
@@ -74,7 +81,7 @@ const StartPage = ({onChangePage}) => {
               active={true} 
               isSelected={selected}
               handleCardClick={() => {
-                if (Object.keys(pokemonsContext.pokemon).length < 5 || selected)
+                if (Object.keys(gameRedux.player1).length < 5 || selected)
                 handleCardClick(key)}
             }
               />)

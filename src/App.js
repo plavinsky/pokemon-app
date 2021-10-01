@@ -13,6 +13,7 @@ import cn from "classnames";
 import s from "./style.module.css";
 import { FireBaseContext } from "./context/firebaseContext";
 import Firebase from "./services/firebase";
+import FirebaseClass from "./services/firebase";
 
 
 
@@ -20,9 +21,10 @@ const App = () => {
   const location = useLocation();
   const isPadding = location.pathname === "/" || location.pathname === "/game/board";
 
+  ///asda
   
   return (
-        <FireBaseContext.Provider  value={new Firebase()}>
+        
           <Switch>
             <Route>
               <>
@@ -45,7 +47,7 @@ const App = () => {
             <Route component={NotFound} />
 
           </Switch>
-        </FireBaseContext.Provider>
+        
   )
 
 
