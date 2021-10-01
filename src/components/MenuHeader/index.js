@@ -1,4 +1,5 @@
 import { useState } from "react";
+import LoginForm from "../LoginForm";
 import Menu from "../Menu"
 import Modal from "../Modal";
 import Navbar from "../Navbar"
@@ -16,6 +17,13 @@ const MenuHeader = ({bgActive}) => {
         setOpenModal(prevState => !prevState);
     }
 
+    const handleSubmit = async ({email, password}) => {
+
+        console.log("email:", email);
+
+        
+    }
+
     return (
         <>
 
@@ -29,10 +37,12 @@ const MenuHeader = ({bgActive}) => {
             isActive={isOpen} />
         
         
-            <Modal  title="Log in!"
+            <Modal  title="Login/Register"
                     isOpen={isOpenModal}
                     onCloseModal={handleClickLogin}>
-            Some text
+            <LoginForm 
+                isOpen={isOpenModal}
+                onSubmitLoginForm={handleSubmit}/>
             </Modal>
             
         </>
