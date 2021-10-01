@@ -21,6 +21,7 @@ const App = () => {
   const location = useLocation();
   const isPadding = location.pathname === "/" || location.pathname === "/game/board";
 
+  ///asda
   
   return (
         
