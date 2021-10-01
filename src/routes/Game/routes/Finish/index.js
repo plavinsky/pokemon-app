@@ -1,11 +1,8 @@
-import { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
-import { FireBaseContext } from "../../../../context/firebaseContext";
 import FirebaseClass from "../../../../services/firebase";
 import { selectGame, gameMethods} from "../../../../store/game";
 import FinishCards from "./component/FinishCards";
-import s from "./style.module.css";
 
 
 const FinishPage = (poks1,poks2) => {
