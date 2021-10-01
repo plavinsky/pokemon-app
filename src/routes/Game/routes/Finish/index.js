@@ -3,7 +3,7 @@ import { useHistory } from "react-router";
 import { FireBaseContext } from "../../../../context/firebaseContext";
 import { PokemonContext } from "../../../../context/pokemonContext";
 import FinishCards from "./component/FinishCards";
-import s from "./style.module.css";
+
 
 const FinishPage = (poks1,poks2) => {
     const history = useHistory();
