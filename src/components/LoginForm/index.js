@@ -53,6 +53,7 @@ const LoginForm = ({isOpen, onSubmitLoginForm}) => {
             }
             else {
                 NotificationManager.success("SignIn successfully!")
+                localStorage.setItem('idToken', response.idToken);           
             }
         }
 

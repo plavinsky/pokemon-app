@@ -7,7 +7,7 @@ import Navbar from "../Navbar"
 
 const MenuHeader = ({bgActive}) => {
     const [isOpen, setOpen] = useState(null);
-    const [isOpenModal, setOpenModal] = useState(false);
+    const [isOpenModal, setOpenModal] = useState(true);
     
     const handleOpenMenuClick = () => {
         setOpen(prevState => !prevState);
