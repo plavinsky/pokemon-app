@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import {NotificationManager} from 'react-notifications';
 import InputPretty from "../InputPretty";
 import s from "./style.module.css";
 
@@ -26,6 +27,13 @@ const LoginForm = ({isOpen, onSubmitLoginForm}) => {
             }
             const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCpWmC-M6rJUNfHaP7s8NiJ6-WdtvWgBmw', requestOptions).then(res => res.json());
             console.log("response:", response);
+            if (response.hasOwnProperty('error'))
+            {
+                NotificationManager.error(response.error.message, "Worng!")
+            }
+            else {
+                NotificationManager.success("SignUp successfully!")
+            }
         }
         else {
             const requestOptions = {
@@ -38,6 +46,14 @@ const LoginForm = ({isOpen, onSubmitLoginForm}) => {
             }
             const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCpWmC-M6rJUNfHaP7s8NiJ6-WdtvWgBmw', requestOptions).then(res => res.json());
             console.log("response:", response);
+
+            if (response.hasOwnProperty('error'))
+            {
+                NotificationManager.error(response.error.message, "Worng!")
+            }
+            else {
+                NotificationManager.success("SignIn successfully!")
+            }
         }
 
 

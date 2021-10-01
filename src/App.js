@@ -1,4 +1,6 @@
 import MenuHeader from "./components/MenuHeader";
+import {NotificationContainer} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 import Footer from "./components/Footer";
 
 import GamePage from "./routes/Game";
@@ -22,7 +24,7 @@ const App = () => {
   const isPadding = location.pathname === "/" || location.pathname === "/game/board";
   
   return (
-        
+          <>
           <Switch>
             <Route>
               <>
@@ -45,7 +47,8 @@ const App = () => {
             <Route component={NotFound} />
 
           </Switch>
-        
+          <NotificationContainer/>
+          </>
   )
 
 
