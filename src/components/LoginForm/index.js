@@ -89,8 +89,9 @@ const LoginForm = ({isOpen, onSubmitLoginForm}) => {
                 required
             />
             <div className={s.wrapper}>
-                <button >
-                {isRegister ? "Register!" : "Login?"}
+                <button 
+                disabled={email === '' || password === ''}>
+                {isRegister ? "Register!" : "Login!"}
                 </button>
                 
                 <span className={s.question}
