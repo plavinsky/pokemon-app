@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import {NotificationManager} from 'react-notifications';
+import { useDispatch } from "react-redux";
+import { getUserAsync } from "../../store/user";
 import InputPretty from "../InputPretty";
 import s from "./style.module.css";
 
@@ -25,6 +27,7 @@ const LoginForm = ({isOpen, onSubmitLoginForm}) => {
     const [isRegister, setIsRegister] = useState(true);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const dispatch = useDispatch();
     
     const hanleLoginClick = async (e) => {
         e.preventDefault();
@@ -37,52 +40,26 @@ const LoginForm = ({isOpen, onSubmitLoginForm}) => {
             NotificationManager.error(response.error.message, "Worng!")
         }
         else {
+            if (isRegister)
+            {
+                const pokemonsResponse = await fetch('https://reactmarathon-api.herokuapp.com/api/pokemons/starter').then(res => res.json());
+                console.log("pokemonsResponse", pokemonsResponse)
+
+                pokemonsResponse?.data.forEach(element => {
+                    fetch(`https://pokemon-game-2bc55-default-rtdb.firebaseio.com/${response.localId}/pokemons.json?auth=${response.idToken}`, {
+                        method: 'POST',
+                        body: JSON.stringify(element)
+                    })
+                });
+            }
+            
             NotificationManager.success("SignIn successfully!")
-            localStorage.setItem('idToken', response.idToken);   
+            localStorage.setItem('idToken', response.idToken);
+            dispatch(getUserAsync());
+             
             
             onSubmitLoginForm && onSubmitLoginForm();
         }
-
-        //console.log("values:", {email, password});
-
-        //onSubmitLoginForm && onSubmitLoginForm({email, password});
-        // if (isRegister)
-        // {
-            
-        //     const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCpWmC-M6rJUNfHaP7s8NiJ6-WdtvWgBmw', requestOptions).then(res => res.json());
-        //     console.log("response:", response);
-        //     if (response.hasOwnProperty('error'))
-        //     {
-        //         NotificationManager.error(response.error.message, "Worng!")
-        //     }
-        //     else {
-        //         NotificationManager.success("SignUp successfully!")
-        //     }
-        // }
-        // else {
-        //     const requestOptions = {
-        //         method: 'POST',
-        //         body: JSON.stringify({
-        //             email,
-        //             password,
-        //             returnSecurityToken: true
-        //         })
-        //     }
-        //     const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCpWmC-M6rJUNfHaP7s8NiJ6-WdtvWgBmw', requestOptions).then(res => res.json());
-        //     console.log("response:", response);
-
-        //     if (response.hasOwnProperty('error'))
-        //     {
-        //         NotificationManager.error(response.error.message, "Worng!")
-        //     }
-        //     else {
-        //         NotificationManager.success("SignIn successfully!")
-        //         localStorage.setItem('idToken', response.idToken);           
-        //     }
-        // }
-
-
-        
         
     }
 

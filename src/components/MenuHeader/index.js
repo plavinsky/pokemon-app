@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { selectLocalID, selectUserIsLoading } from "../../store/user";
 import LoginForm from "../LoginForm";
 import Menu from "../Menu"
 import Modal from "../Modal";
@@ -8,6 +10,11 @@ import Navbar from "../Navbar"
 const MenuHeader = ({bgActive}) => {
     const [isOpen, setOpen] = useState(null);
     const [isOpenModal, setOpenModal] = useState(true);
+    const isLoading = useSelector(selectUserIsLoading);
+    const localId = useSelector(selectLocalID);
+
+    console.log("MenuHeader isLoading", isLoading);
+    console.log("MenuHeader localId", localId);
     
     const handleOpenMenuClick = () => {
         setOpen(prevState => !prevState);
@@ -35,7 +42,7 @@ const MenuHeader = ({bgActive}) => {
         
         
             <Modal  title="Login/Register"
-                    isOpen={isOpenModal}
+                    isOpen={!isLoading && !localId && isOpenModal}
                     onCloseModal={handleClickLogin}>
             <LoginForm 
                 isOpen={isOpenModal}

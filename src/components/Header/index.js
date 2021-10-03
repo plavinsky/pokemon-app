@@ -1,9 +1,9 @@
-import { useHistory } from 'react-router';
+
 import s from './style.module.css';
 
 
 const Header = ({title=null, descr=null, onGameClick}) => {
-    const history = useHistory();
+    
 
     const handleGameClick = () => {
         //history.push('game');

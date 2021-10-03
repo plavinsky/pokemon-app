@@ -10,7 +10,7 @@ import "firebase/compat/database";
 
 
 // Your web app's Firebase configuration
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: "AIzaSyCpWmC-M6rJUNfHaP7s8NiJ6-WdtvWgBmw",
   authDomain: "pokemon-game-2bc55.firebaseapp.com",
   databaseURL: "https://pokemon-game-2bc55-default-rtdb.firebaseio.com",

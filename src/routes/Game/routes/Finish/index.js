@@ -15,7 +15,7 @@ const FinishPage = (poks1,poks2) => {
     console.log("Finish");
     
 
-    if (gameRedux.winner != 1)
+    if (gameRedux.winner !== 1)
     {
         dispatch(gameMethods.clean());
         history.replace("/game");
