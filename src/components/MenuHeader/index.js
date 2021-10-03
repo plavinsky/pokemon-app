@@ -17,11 +17,8 @@ const MenuHeader = ({bgActive}) => {
         setOpenModal(prevState => !prevState);
     }
 
-    const handleSubmit = async ({email, password}) => {
-
-        console.log("email:", email);
-
-        
+    const handleSubmit = async () => {
+        handleClickLogin();   
     }
 
     return (

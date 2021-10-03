@@ -3,6 +3,23 @@ import {NotificationManager} from 'react-notifications';
 import InputPretty from "../InputPretty";
 import s from "./style.module.css";
 
+const loginSignUpResponse = async (isReg, email, password) => {
+    const requestOptions = {
+        method: 'POST',
+        body: JSON.stringify({
+            email,
+            password,
+            returnSecurityToken: true
+        })
+    }
+    
+    if (isReg)
+        return await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCpWmC-M6rJUNfHaP7s8NiJ6-WdtvWgBmw', requestOptions).then(res => res.json());
+
+    return await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCpWmC-M6rJUNfHaP7s8NiJ6-WdtvWgBmw', requestOptions).then(res => res.json());
+}
+
+
 const LoginForm = ({isOpen, onSubmitLoginForm}) => {
     
     const [isRegister, setIsRegister] = useState(true);
@@ -12,50 +29,57 @@ const LoginForm = ({isOpen, onSubmitLoginForm}) => {
     const hanleLoginClick = async (e) => {
         e.preventDefault();
 
+        const response = await loginSignUpResponse(isRegister, email, password);
+        console.log("response",response);
+
+        if (response.hasOwnProperty('error'))
+        {
+            NotificationManager.error(response.error.message, "Worng!")
+        }
+        else {
+            NotificationManager.success("SignIn successfully!")
+            localStorage.setItem('idToken', response.idToken);   
+            
+            onSubmitLoginForm && onSubmitLoginForm();
+        }
+
         //console.log("values:", {email, password});
 
         //onSubmitLoginForm && onSubmitLoginForm({email, password});
-        if (isRegister)
-        {
-            const requestOptions = {
-                method: 'POST',
-                body: JSON.stringify({
-                    email,
-                    password,
-                    returnSecurityToken: true
-                })
-            }
-            const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCpWmC-M6rJUNfHaP7s8NiJ6-WdtvWgBmw', requestOptions).then(res => res.json());
-            console.log("response:", response);
-            if (response.hasOwnProperty('error'))
-            {
-                NotificationManager.error(response.error.message, "Worng!")
-            }
-            else {
-                NotificationManager.success("SignUp successfully!")
-            }
-        }
-        else {
-            const requestOptions = {
-                method: 'POST',
-                body: JSON.stringify({
-                    email,
-                    password,
-                    returnSecurityToken: true
-                })
-            }
-            const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCpWmC-M6rJUNfHaP7s8NiJ6-WdtvWgBmw', requestOptions).then(res => res.json());
-            console.log("response:", response);
+        // if (isRegister)
+        // {
+            
+        //     const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCpWmC-M6rJUNfHaP7s8NiJ6-WdtvWgBmw', requestOptions).then(res => res.json());
+        //     console.log("response:", response);
+        //     if (response.hasOwnProperty('error'))
+        //     {
+        //         NotificationManager.error(response.error.message, "Worng!")
+        //     }
+        //     else {
+        //         NotificationManager.success("SignUp successfully!")
+        //     }
+        // }
+        // else {
+        //     const requestOptions = {
+        //         method: 'POST',
+        //         body: JSON.stringify({
+        //             email,
+        //             password,
+        //             returnSecurityToken: true
+        //         })
+        //     }
+        //     const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCpWmC-M6rJUNfHaP7s8NiJ6-WdtvWgBmw', requestOptions).then(res => res.json());
+        //     console.log("response:", response);
 
-            if (response.hasOwnProperty('error'))
-            {
-                NotificationManager.error(response.error.message, "Worng!")
-            }
-            else {
-                NotificationManager.success("SignIn successfully!")
-                localStorage.setItem('idToken', response.idToken);           
-            }
-        }
+        //     if (response.hasOwnProperty('error'))
+        //     {
+        //         NotificationManager.error(response.error.message, "Worng!")
+        //     }
+        //     else {
+        //         NotificationManager.success("SignIn successfully!")
+        //         localStorage.setItem('idToken', response.idToken);           
+        //     }
+        // }
 
 
         
