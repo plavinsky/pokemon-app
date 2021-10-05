@@ -16,7 +16,7 @@ import s from "./style.module.css";
 import PrivateRoute from "./components/PrivateRoute";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { getUserAsync } from "./store/user";
+import { getUser, getUserAsync} from "./store/user";
 import User from "./routes/User";
 
 
@@ -29,6 +29,8 @@ const App = () => {
   useEffect(() => {
     dispatch(getUserAsync());
   }, [])
+
+  getUser(1);
 
   return (
           <>

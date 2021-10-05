@@ -47,7 +47,7 @@ export const getUserAsync = () => async (dispatch) => {
         }
         else {
             dispatch(userActions.updateUser(userResp?.users[0]));
-            
+            localStorage.setItem('localId', userResp?.users[0]?.localId);
         }
 
     }
@@ -59,6 +59,13 @@ export const getUserAsync = () => async (dispatch) => {
 
     
 }
+
+export const getUser = (id) => {
+    return async (dispatch, getState) => {
+         const currentState= getState().user;
+        console.log("fromUser:", currentState) 
+    };
+  };
 
 export default slice.reducer;
 

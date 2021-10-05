@@ -35,7 +35,8 @@ export const selectPokemonsData = state => state.pokemons.data;
 
 export const getPokemonAsync = () => async dispatch => {
     dispatch(fetchPokemons);
-    const data = await FirebaseClass.getPokemonsOnce();
+    //const data = await FirebaseClass.getPokemonsOnce();
+    const data = await FirebaseClass.getPokemonsOnceAPI();
     dispatch(fetchPokemonsResolve(data))
 }
 
