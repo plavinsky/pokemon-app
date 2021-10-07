@@ -13,17 +13,30 @@ import { Route, Switch, useLocation} from "react-router-dom";
 import cn from "classnames";
 
 import s from "./style.module.css";
-import { FireBaseContext } from "./context/firebaseContext";
-import Firebase from "./services/firebase";
-import FirebaseClass from "./services/firebase";
 import PrivateRoute from "./components/PrivateRoute";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { getUser, getUserAsync} from "./store/user";
+import User from "./routes/User";
 
 
 
 const App = () => {
   const location = useLocation();
   const isPadding = location.pathname === "/" || location.pathname === "/game/board";
-  
+  const dispatch = useDispatch();
+  //const user = useSelector(selectUser);
+
+  useEffect(() => {
+    function doDispatch() {
+      dispatch(getUserAsync());
+    }
+
+    doDispatch();
+  }, [])
+
+  getUser(1);
+
   return (
           <>
           <Switch>
@@ -39,6 +52,7 @@ const App = () => {
                   <PrivateRoute path="/game" component={GamePage}/>
                   <PrivateRoute path="/about" component={AboutPage}/>
                   <Route path="/contact" component={ContactPage}/>
+                  <PrivateRoute path="/user" component={User}/>
                 </Switch> 
                 </div>
                 <Footer />

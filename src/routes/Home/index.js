@@ -7,9 +7,9 @@ import BGIMage1 from '../../assets/bg1.jpeg';
 import BGIMage3 from '../../assets/bg3.jpeg';
 
 import POKEMONS from '../../data/pokemons.json';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
-import {gameMethods, selectGame} from "../../store/game";
+import {gameMethods} from "../../store/game";
 
 import s from './style.module.css';
 

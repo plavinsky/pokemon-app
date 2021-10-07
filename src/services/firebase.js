@@ -10,7 +10,7 @@ import "firebase/compat/database";
 
 
 // Your web app's Firebase configuration
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: "AIzaSyCpWmC-M6rJUNfHaP7s8NiJ6-WdtvWgBmw",
   authDomain: "pokemon-game-2bc55.firebaseapp.com",
   databaseURL: "https://pokemon-game-2bc55-default-rtdb.firebaseio.com",
@@ -41,20 +41,52 @@ class Firebase{
     });
   }
 
-  getPokemonsOnce = async () => {
+  getPokemonsOnce = async (user) => {
     return await this.database.ref('pokemons').once("value").then(snapshot => snapshot.val());
+    
+
+    //return await fetch(`${firebaseConfig.databaseURL}/${user.localId}/pokemons.json?auth=${localStorage.getItem('idToken')}`).then(res => res.json());
   }
 
   postPokemon = (key, pokemon) => {
     this.database.ref(`pokemons/${key}`).set(pokemon);
   }
 
-   addPokemon = (data, cb) => {
-    const newKey = this.database.ref().child('pokemons').push().key;
-    this.database.ref('pokemons/' + newKey).set(data).then(() => cb());
+  addPokemon = (data, cb) => {
+  const newKey = this.database.ref().child('pokemons').push().key;
+  this.database.ref('pokemons/' + newKey).set(data).then(() => cb());
+
+  //var user = selectUser();
   
-    //return newKey;
-   }
+
+  // fetch(`${firebaseConfig.databaseURL}/${user.localId}/pokemons.json?auth=${localStorage.getItem('idToken')}`, {
+  //       method: 'POST',
+  //       body: JSON.stringify(data)
+  //   }).then(() => cb());
+
+  //return newKey;
+  }
+
+  addPokemonAPI = (data, user, cb) => {
+  
+    //fetch(`${firebaseConfig.databaseURL}/${user.localId}/pokemons.json?auth=${localStorage.getItem('idToken')}`, {
+      fetch(`${firebaseConfig.databaseURL}/${user.localId}/pokemons.json`, {
+          method: 'POST',
+          body: JSON.stringify(data)
+      }).then(() => cb());
+  
+  }
+
+  getPokemonsOnceAPI = async () => {
+    // return 
+    //debugger;
+    // var resp1 = await this.database.ref('pokemons').once("value").then(snapshot => snapshot.val());
+
+    var resp = await fetch(`${firebaseConfig.databaseURL}/${localStorage.getItem('localId')}/pokemons.json`).then(res => res.json());
+
+    return resp;
+  }
+
 }
 
 

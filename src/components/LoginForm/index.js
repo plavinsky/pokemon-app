@@ -1,64 +1,65 @@
 import { useEffect, useState } from "react";
 import {NotificationManager} from 'react-notifications';
+import { useDispatch } from "react-redux";
+import { getUserAsync } from "../../store/user";
 import InputPretty from "../InputPretty";
 import s from "./style.module.css";
+
+const loginSignUpResponse = async (isReg, email, password) => {
+    const requestOptions = {
+        method: 'POST',
+        body: JSON.stringify({
+            email,
+            password,
+            returnSecurityToken: true
+        })
+    }
+    
+    if (isReg)
+        return await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCpWmC-M6rJUNfHaP7s8NiJ6-WdtvWgBmw', requestOptions).then(res => res.json());
+
+    return await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCpWmC-M6rJUNfHaP7s8NiJ6-WdtvWgBmw', requestOptions).then(res => res.json());
+}
+
 
 const LoginForm = ({isOpen, onSubmitLoginForm}) => {
     
     const [isRegister, setIsRegister] = useState(true);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const dispatch = useDispatch();
     
     const hanleLoginClick = async (e) => {
         e.preventDefault();
 
-        //console.log("values:", {email, password});
+        const response = await loginSignUpResponse(isRegister, email, password);
+        console.log("response",response);
 
-        //onSubmitLoginForm && onSubmitLoginForm({email, password});
-        if (isRegister)
+        if (response.hasOwnProperty('error'))
         {
-            const requestOptions = {
-                method: 'POST',
-                body: JSON.stringify({
-                    email,
-                    password,
-                    returnSecurityToken: true
-                })
-            }
-            const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCpWmC-M6rJUNfHaP7s8NiJ6-WdtvWgBmw', requestOptions).then(res => res.json());
-            console.log("response:", response);
-            if (response.hasOwnProperty('error'))
-            {
-                NotificationManager.error(response.error.message, "Worng!")
-            }
-            else {
-                NotificationManager.success("SignUp successfully!")
-            }
+            NotificationManager.error(response.error.message, "Worng!")
         }
         else {
-            const requestOptions = {
-                method: 'POST',
-                body: JSON.stringify({
-                    email,
-                    password,
-                    returnSecurityToken: true
-                })
-            }
-            const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCpWmC-M6rJUNfHaP7s8NiJ6-WdtvWgBmw', requestOptions).then(res => res.json());
-            console.log("response:", response);
-
-            if (response.hasOwnProperty('error'))
+            if (isRegister)
             {
-                NotificationManager.error(response.error.message, "Worng!")
+                const pokemonsResponse = await fetch('https://reactmarathon-api.herokuapp.com/api/pokemons/starter').then(res => res.json());
+                console.log("pokemonsResponse", pokemonsResponse)
+
+                pokemonsResponse?.data.forEach(element => {
+                    fetch(`https://pokemon-game-2bc55-default-rtdb.firebaseio.com/${response.localId}/pokemons.json?auth=${response.idToken}`, {
+                        method: 'POST',
+                        body: JSON.stringify(element)
+                    })
+                });
             }
-            else {
-                NotificationManager.success("SignIn successfully!")
-                localStorage.setItem('idToken', response.idToken);           
-            }
+            
+            NotificationManager.success("SignIn successfully!")
+            localStorage.setItem('idToken', response.idToken);
+            dispatch(getUserAsync());
+             
+            
+            onSubmitLoginForm && onSubmitLoginForm();
         }
-
-
-        
         
     }
 
@@ -89,8 +90,9 @@ const LoginForm = ({isOpen, onSubmitLoginForm}) => {
                 required
             />
             <div className={s.wrapper}>
-                <button >
-                {isRegister ? "Register!" : "Login?"}
+                <button 
+                disabled={email === '' || password === ''}>
+                {isRegister ? "Register!" : "Login!"}
                 </button>
                 
                 <span className={s.question}

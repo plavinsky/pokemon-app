@@ -21,13 +21,13 @@ const Modal = ({isOpen, title, children, onCloseModal}) => {
 
     return (
         <div 
-            class={cn(s.root, {[s.open]: isOpen})}
+            className={cn(s.root, {[s.open]: isOpen})}
             onClick={handleClickRoot}>
-        <div class={s.modal}
+        <div className={s.modal}
             ref={modalEl}>
-            <div class={s.head}>
+            <div className={s.head}>
                             { title }
-                <span class={s.btnClose}
+                <span className={s.btnClose}
                       onClick={handleCloseClick}  
                       >
                 </span>
