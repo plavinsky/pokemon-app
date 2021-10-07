@@ -8,22 +8,21 @@ import s from './style.module.css';
 
 const PlayerBoard = ({cards, onClickCard, player, turnPlayer}) => {
     const [isSelected,setSelected] = useState(null);
-    
+    //isSelected === item.id
     if (cards)
         return (
             <>
                 {
                     cards && cards.map(
                         (item) => (
-                        <div className={cn(s.cardBoard, 
-                            {[s.selected]: isSelected === item.id})}
+                        <div key={item.id} className={cn(s.cardBoard, 
+                            {[s.selected]: item.selected})}
                             onClick={() => {
                                 const turn = turnPlayer;
 
                                 if (turn === player)
                                 {
-                                    console.log(item.id);
-                                    setSelected(item.id);
+                                    item.selected = true;
                                     onClickCard && onClickCard({
                                         player,
                                         ...item})

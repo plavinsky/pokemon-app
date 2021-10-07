@@ -9,6 +9,7 @@ import Result from './component/Result';
 import requestAPI from '../../../../utils/request'
 
 import s from './style.module.css';
+import { returnBoard } from '../../../../utils';
 
 const counterWin = (board, player1, player2) => {
     let player1Counter = player1.length;
@@ -36,6 +37,7 @@ const BoardPage = () => {
     const [result, setResult] = useState(null);
     const [choiceCard, setChoiceCard] = useState(null);
     const [steps, setSteps] = useState(0);
+    const [serverBoard, setServerBoard] = useState([0,0,0,0,0,0,0,0,0]);
 
     
     const dispatch = useDispatch();
@@ -139,21 +141,37 @@ const BoardPage = () => {
         if (isDublicate) return;
 
         if (choiceCard) {
+            // const params = {
+            //     position,
+            //     card: choiceCard,
+            //     board,
+            // }
+
+            // const res = await fetch('https://reactmarathon-api.netlify.app/api/players-turn', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify(params),
+            // });
+
+            // const request = await res.json();      
+            
             const params = {
-                position,
-                card: choiceCard,
-                board,
+                currentPlayer: 'p1',
+                hands: {
+                    p1: player1,
+                    p2: player2
+                },
+                move: {
+                    poke: choiceCard,
+                    position
+                },
+                board: serverBoard
             }
 
-            const res = await fetch('https://reactmarathon-api.netlify.app/api/players-turn', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(params),
-            });
-
-            const request = await res.json();        
+            const game = await requestAPI.game(params);
+            console.log("gameRequest", game)
 
             if (choiceCard.player === 1) {
                 setPlayer1(prevState => prevState.filter(item => item.id !== choiceCard.id))
@@ -163,10 +181,47 @@ const BoardPage = () => {
                 setPlayer2(prevState => prevState.filter(item => item.id !== choiceCard.id))
             }
 
-            setBoard(request.data);
-            setSteps(steps+1);
+            // setBoard(prevState => prevState.map(item => {
+            //     if (item.position === position)
+            //         return {
+            //             ...item,
+            //             card: choiceCard
+            //         }
+
+            //     return item;
+            // }));
+            setBoard(returnBoard(game.oldBoard));
+
+            if (game.move !== null)
+            {
+                const idAi = game.move.poke.id;
+            
+                setTimeout(() => setPlayer2(prevState => prevState.map(item => {
+                        if (item.id === idAi)
+                            return {
+                                ...item,
+                                selected: true,
+                            }
+    
+                        return item;
+                    })), 1000
+                );
+
+                setTimeout(() => {
+                    setPlayer2(() => game.hands.p2.pokes.map(item => item.poke));
+                    setServerBoard(game.board);
+                    setBoard(returnBoard(game.board));
+
+                    setSteps(prevState => prevState+1);
+                }, 1500)
+            }
+
+
+            setSteps(count => count+1);
             setChoiceCard(null);
-            setStateTurn(turn === 1 ? 2 : 1);
+
+            console.log("steps:", steps);
+            //setStateTurn(turn === 1 ? 2 : 1);
         }
 
         
@@ -197,7 +252,10 @@ const BoardPage = () => {
                     ))
                 }
             </div>
-            <ArrowChoice side={stateTurn}/>
+            {
+                (steps === 0 ) && <ArrowChoice side={stateTurn}/>
+            }
+            
             <div className={s.playerTwo}>
             <PlayerBoard 
                 player={2}
