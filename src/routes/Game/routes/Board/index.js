@@ -33,7 +33,7 @@ const BoardPage = () => {
     const [player1, setPlayer1] = useState(() => Object.values(gameRedux.player1).map(item=>({...item, possession:'blue'})));
     const [player2, setPlayer2] = useState([]);
     
-    const [stateTurn, setStateTurn] = useState(1);    
+    const [stateTurn, setStateTurn] = useState(undefined);    
     const [result, setResult] = useState(null);
     const [choiceCard, setChoiceCard] = useState(null);
     const [steps, setSteps] = useState(0);
@@ -43,17 +43,22 @@ const BoardPage = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
+    console.log("render");
+
     if (Object.values(gameRedux.player1).length === 0)
         history.replace("/game");
 
     let turn = stateTurn;
         if (turn === undefined)
             {
-                turn = Math.floor(Math.random()*2)+1;
-                setStateTurn(turn);
+                //console.log("stateTurn")
+                turn = 1;//Math.floor(Math.random()*2+1);
+                console.log("stateTurn", turn)
+                setStateTurn(prevstate => turn);
 
             }
-
+    
+    
 
     
 
@@ -81,9 +86,66 @@ const BoardPage = () => {
             
             dispatch(gameMethods.player2Set(player2Request.data.map(item=>({...item}))));
             setPlayer2(res);
+
+            
+
         }
         
         asyncEffect();
+
+        // return async () => {
+
+        //     if (stateTurn === 2)
+        //     {
+        //         console.log("effect2")
+                
+        //         const params = {
+        //             currentPlayer: 'p1',
+        //             hands: {
+        //             p1: player1,
+        //             p2: player2
+        //             },
+        //             move: null,
+        //             board: serverBoard,
+        //         };
+
+        //         const game = await requestAPI.game(params);
+        //         console.log("gameRequest", game)
+
+        //         setBoard(returnBoard(game.oldBoard));
+
+        //             if (game.move !== null)
+        //             {
+        //                 const idAi = game.move.poke.id;
+                    
+        //                 setTimeout(() => setPlayer2(prevState => prevState.map(item => {
+        //                         if (item.id === idAi)
+        //                             return {
+        //                                 ...item,
+        //                                 selected: true,
+        //                             }
+            
+        //                         return item;
+        //                     })), 1000
+        //                 );
+
+        //                 setTimeout(() => {
+        //                     setPlayer2(() => game.hands.p2.pokes.map(item => item.poke));
+        //                     setServerBoard(game.board);
+        //                     setBoard(returnBoard(game.board));
+
+        //                     setSteps(prevState => prevState+1);
+        //                 }, 1500)
+        //             }
+
+
+        //             setSteps(count => count+1);
+        //             setChoiceCard(null);
+
+        //             console.log("steps:", steps);
+        //     }
+
+        // }
     }, [])
 
 
