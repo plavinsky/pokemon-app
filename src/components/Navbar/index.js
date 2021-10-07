@@ -1,6 +1,5 @@
 import cn from "classnames";
 import { useSelector } from "react-redux";
-import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
 import {ReactComponent as LoginSVG} from "../../assets/login.svg";
 import {ReactComponent as UserSVG} from "../../assets/user.svg";
@@ -11,22 +10,18 @@ import s from "./style.module.css";
 
 
 
-const Navbar = ({onMenuClick: onMenuClick, isActive, bgActive = false, onClickLogin}) => {
-    const history = useHistory();
+const Navbar = ({onMenuClick, isActive, bgActive = false, onClickLogin}) => {
 
     const isLoading = useSelector(selectUserIsLoading);
     const localId = useSelector(selectLocalID);
 
-    console.log("Navbar isLoading", isLoading);
-    console.log("Navbar localId", localId);
+    // const handleClick = () => {
+    //     onMenuClick && onMenuClick();
+    // }
 
-    const handleClick = () => {
-        onMenuClick && onMenuClick();
-    }
-
-    const handleLogoClick = () => {
-        history.push('');
-    }
+    // const handleLogoClick = () => {
+    //     history.push('');
+    // }
 
 
 
@@ -34,7 +29,7 @@ const Navbar = ({onMenuClick: onMenuClick, isActive, bgActive = false, onClickLo
         <nav id={s.navbar} className={cn({[s.bgActive]: bgActive})}>
         <div className={s.navWrapper}>
             <div>
-                <p className={s.brand} onClick={handleLogoClick}>
+                <p className={s.brand} onClick={onMenuClick}>
                 LOGO
                 </p>
             </div>
@@ -61,7 +56,7 @@ const Navbar = ({onMenuClick: onMenuClick, isActive, bgActive = false, onClickLo
                 
                 <div>
                     <div className={cn(s.menuButton, {[s.active]:!isActive})} 
-                         onClick={handleClick}>
+                         onClick={onMenuClick}>
                         <span />
                     </div>
                 </div>

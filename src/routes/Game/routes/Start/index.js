@@ -23,7 +23,6 @@ const StartPage = ({onChangePage}) => {
     }, []);
 
     useEffect(() => {
-        console.log("useEffect")
         setPokemons(pokemonsRedux);
     }, [pokemonsRedux]);
 

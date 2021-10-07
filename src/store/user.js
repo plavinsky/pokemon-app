@@ -40,7 +40,6 @@ export const getUserAsync = () => async (dispatch) => {
             body: JSON.stringify({idToken})
             }).then(res => res.json());
         
-        console.log("userResp", userResp);
         if (userResp.hasOwnProperty('error')) {
             localStorage.removeItem('idToken');
             dispatch(userActions.removeUser());

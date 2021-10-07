@@ -3,18 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { selectUser, userActions } from '../../store/user';
 
-function displayObject (obj) {
-    var jsx = (Object.entries(obj)).map( item => {
-        //if (typeof item !== Object)
-         return (<p>{item[0]} - {item[1]}</p>);
-        // else
-        //     displayObject(item);
-    });
-
-    console.log("jsx", jsx);
-    return jsx;
-}
-
 const User = () => {
     const dispatch = useDispatch();
     const history = useHistory();

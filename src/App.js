@@ -25,9 +25,14 @@ const App = () => {
   const location = useLocation();
   const isPadding = location.pathname === "/" || location.pathname === "/game/board";
   const dispatch = useDispatch();
+  //const user = useSelector(selectUser);
 
   useEffect(() => {
-    dispatch(getUserAsync());
+    function doDispatch() {
+      dispatch(getUserAsync());
+    }
+
+    doDispatch();
   }, [])
 
   getUser(1);

@@ -13,9 +13,6 @@ const MenuHeader = ({bgActive}) => {
     const isLoading = useSelector(selectUserIsLoading);
     const localId = useSelector(selectLocalID);
 
-    console.log("MenuHeader isLoading", isLoading);
-    console.log("MenuHeader localId", localId);
-    
     const handleOpenMenuClick = () => {
         setOpen(prevState => !prevState);
     }
