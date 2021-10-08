@@ -30,17 +30,13 @@ const isBoardFull = (board) => {
     let res = board.length > 0;
 
     board.forEach(item => {
-
-        console.log("item:", item.card);
         if (item.card === null)
         {
-            console.log("item:", item.card === null);
             res = false;
         }
             
     });
 
-    console.log("res", res)
     return res;
 }
 
@@ -54,81 +50,40 @@ const BoardPage = () => {
     const [stateTurn, setStateTurn] = useState(undefined);    
     const [result, setResult] = useState(null);
     const [choiceCard, setChoiceCard] = useState(null);
-    const [steps, setSteps] = useState(0);
     const [serverBoard, setServerBoard] = useState([0,0,0,0,0,0,0,0,0]);
 
     
     const dispatch = useDispatch();
     const history = useHistory();
 
-    let stepsCounter = 0;
 
     if (Object.values(gameRedux.player1).length === 0)
         history.replace("/game");
 
-    let turn = stateTurn;
-        if (turn === undefined)
+    
+    if (player1.length === 5 && player2.length === 5 && stateTurn === undefined)
+    {
+        
+        setTimeout( () => {
+            const turn = Math.floor(Math.random()*2+1);
+            setStateTurn(turn);
+
+            if (turn === 2)
             {
-                turn = 2;//Math.floor(Math.random()*2+1);
-                console.log("stateTurn", turn)
-                setStateTurn(prevstate => turn);
-
-            }
-    
-    
-
-    
-
-    useEffect(async () => {
-        // const boardResponse = await fetch("https://reactmarathon-api.netlify.app/api/board");
-        // const boardRequest = await boardResponse.json();
-
-        async function asyncEffect() {
-            const boardRequest = await requestAPI.getBoard();
-            setBoard(boardRequest.data);
-            
-
-            console.log("boardRequest", JSON.stringify(boardRequest));
-            
-            // const player2Response = await fetch("https://reactmarathon-api.netlify.app/api/create-player");
-            // const player2Request =  await player2Response.json();
-
-            const player2Request = await requestAPI.gameStart({pokemons: Object.values(gameRedux.player1)});
-
-            console.log("player2Request", JSON.stringify(player2Request));
-
-            const res = player2Request.data.map( item => ({
-                ...item,
-                possession: 'red',
-                }));
-            
-            dispatch(gameMethods.player2Set(player2Request.data.map(item=>({...item}))));
-            setPlayer2(res);
-            
-            setTimeout( async () => {
-                if (stateTurn === 2 & player1.length !== 0)
-                {
-                    console.log("effect2")
+                setTimeout( async () => {
                     
-                    if (player1.length === 0)
-                        setPlayer1(Object.values(gameRedux.player1).map(item=>({...item, possession:'blue'})));
-
-                    const params = {
-                        currentPlayer: 'p2',
-                        hands: {
-                        p1: player1,
-                        p2: res
-                        },
-                        move: null,
-                        board: serverBoard,
-                    };
-    
-                    const game = await requestAPI.game(params);
-                    console.log("gameRequest", game)
+                        const params = {
+                            currentPlayer: 'p2',
+                            hands: {
+                            p1: player1,
+                            p2: gameRedux.player2
+                            },
+                            move: null,
+                            board: serverBoard,
+                        };
+        
+                        const game = await requestAPI.game(params);
                     
-                    // if (game.hasOwnProperty('oldBoard'))
-                    // setBoard(returnBoard(game?.oldBoard));
-    
                         if (game.move !== null)
                         {
                             const idAi = game?.move?.poke?.id;
@@ -139,43 +94,46 @@ const BoardPage = () => {
                                             ...item,
                                             selected: true,
                                         }
-                
                                     return item;
                                 })), 1000
                             );
-    
+
                             setTimeout(() => {
                                 setPlayer2(() => game.hands.p2.pokes.map(item => item.poke));
                                 setServerBoard(game.board);
-                                setBoard(returnBoard(game.board));
-                                
-                                console.log("steps021:", steps);
-                                setSteps(1);
-                                console.log("steps022:", steps);
+                                setBoard(returnBoard(game.board));       
+                                setStateTurn(1);
                                 
                             }, 1500)
                         }
-    
-    
-                        //setSteps(count => count+1);
                         setChoiceCard(null);
-                        console.log("steps01:", steps);
-                        
-                        setStateTurn(1);
-                        console.log("stateTurn1:", stateTurn);
-                }
-            }, 500);
-            
+                    
+                }, 500);
+            }   
 
+        }, 2000);
+    }
+    
+    
+    
+    useEffect(async () => {
+        async function asyncEffect() {
+            const boardRequest = await requestAPI.getBoard();
+            setBoard(boardRequest.data);
+            
+            const player2Request = await requestAPI.gameStart({pokemons: Object.values(gameRedux.player1)});
+            const res = player2Request.data.map( item => ({
+                ...item,
+                possession: 'red',
+                }));
+            
+            dispatch(gameMethods.player2Set(player2Request.data.map(item=>({...item}))));
+            setPlayer2(res);
+            
+            
         }
         
         asyncEffect();
-
-        // return async () => {
-        
-            
-
-        // }
     }, [])
 
 
@@ -215,10 +173,6 @@ const BoardPage = () => {
     }, [board]);
     
 
-    if (Object.values(gameRedux.player1).length < 5)
-        history.replace("/game");
-    
-
     const handleClickBoardPlate = async (position) => {
         
         const isDublicate = board.some(({card}) => {
@@ -234,22 +188,6 @@ const BoardPage = () => {
         if (isDublicate) return;
 
         if (choiceCard) {
-            // const params = {
-            //     position,
-            //     card: choiceCard,
-            //     board,
-            // }
-
-            // const res = await fetch('https://reactmarathon-api.netlify.app/api/players-turn', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     },
-            //     body: JSON.stringify(params),
-            // });
-
-            // const request = await res.json();      
-            
             const params = {
                 currentPlayer: 'p1',
                 hands: {
@@ -264,7 +202,6 @@ const BoardPage = () => {
             }
 
             const game = await requestAPI.game(params);
-            console.log("gameRequest", game)
 
             if (choiceCard.player === 1) {
                 setPlayer1(prevState => prevState.filter(item => item.id !== choiceCard.id))
@@ -274,16 +211,8 @@ const BoardPage = () => {
                 setPlayer2(prevState => prevState.filter(item => item.id !== choiceCard.id))
             }
 
-            // setBoard(prevState => prevState.map(item => {
-            //     if (item.position === position)
-            //         return {
-            //             ...item,
-            //             card: choiceCard
-            //         }
-
-            //     return item;
-            // }));
             setBoard(returnBoard(game.oldBoard));
+            setStateTurn(2);
 
             if (game.move !== null)
             {
@@ -305,22 +234,12 @@ const BoardPage = () => {
                     setServerBoard(game.board);
                     setBoard(returnBoard(game.board));
 
-                    setSteps(prevState => prevState+1);
-                    stepsCounter++;
-                    console.log("steps after setBoard:", steps);
+                    setStateTurn(1);
                 }, 1500)
             }
 
 
-            setSteps(count => count+1);
-            stepsCounter++;
-            setChoiceCard(null);
-
-            console.log("steps:", steps);
-            console.log("stepsCounter:", stepsCounter);
-            //setStateTurn(prevState => prevState === 1 ? 2 : 1);
-            console.log("stateTurn:", stateTurn);
-            
+            setChoiceCard(null);   
         }
 
         
@@ -352,7 +271,7 @@ const BoardPage = () => {
                 }
             </div>
             {
-                (steps === 0 ) && <ArrowChoice side={stateTurn}/>
+                <ArrowChoice side={stateTurn}/>
             }
             
             <div className={s.playerTwo}>
