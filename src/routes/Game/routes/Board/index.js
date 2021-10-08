@@ -26,6 +26,24 @@ const counterWin = (board, player1, player2) => {
     return [player1Counter, player2Counter];
 }
 
+const isBoardFull = (board) => {
+    let res = board.length > 0;
+
+    board.forEach(item => {
+
+        console.log("item:", item.card);
+        if (item.card === null)
+        {
+            console.log("item:", item.card === null);
+            res = false;
+        }
+            
+    });
+
+    console.log("res", res)
+    return res;
+}
+
 const BoardPage = () => {
     const gameRedux = useSelector(selectGame);
     
@@ -43,7 +61,7 @@ const BoardPage = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    console.log("render");
+    let stepsCounter = 0;
 
     if (Object.values(gameRedux.player1).length === 0)
         history.replace("/game");
@@ -51,8 +69,7 @@ const BoardPage = () => {
     let turn = stateTurn;
         if (turn === undefined)
             {
-                //console.log("stateTurn")
-                turn = 1;//Math.floor(Math.random()*2+1);
+                turn = 2;//Math.floor(Math.random()*2+1);
                 console.log("stateTurn", turn)
                 setStateTurn(prevstate => turn);
 
@@ -69,6 +86,7 @@ const BoardPage = () => {
         async function asyncEffect() {
             const boardRequest = await requestAPI.getBoard();
             setBoard(boardRequest.data);
+            
 
             console.log("boardRequest", JSON.stringify(boardRequest));
             
@@ -86,7 +104,67 @@ const BoardPage = () => {
             
             dispatch(gameMethods.player2Set(player2Request.data.map(item=>({...item}))));
             setPlayer2(res);
+            
+            setTimeout( async () => {
+                if (stateTurn === 2 & player1.length !== 0)
+                {
+                    console.log("effect2")
+                    
+                    if (player1.length === 0)
+                        setPlayer1(Object.values(gameRedux.player1).map(item=>({...item, possession:'blue'})));
 
+                    const params = {
+                        currentPlayer: 'p2',
+                        hands: {
+                        p1: player1,
+                        p2: res
+                        },
+                        move: null,
+                        board: serverBoard,
+                    };
+    
+                    const game = await requestAPI.game(params);
+                    console.log("gameRequest", game)
+                    
+                    // if (game.hasOwnProperty('oldBoard'))
+                    // setBoard(returnBoard(game?.oldBoard));
+    
+                        if (game.move !== null)
+                        {
+                            const idAi = game?.move?.poke?.id;
+                        
+                            setTimeout(() => setPlayer2(prevState => prevState.map(item => {
+                                    if (item.id === idAi)
+                                        return {
+                                            ...item,
+                                            selected: true,
+                                        }
+                
+                                    return item;
+                                })), 1000
+                            );
+    
+                            setTimeout(() => {
+                                setPlayer2(() => game.hands.p2.pokes.map(item => item.poke));
+                                setServerBoard(game.board);
+                                setBoard(returnBoard(game.board));
+                                
+                                console.log("steps021:", steps);
+                                setSteps(1);
+                                console.log("steps022:", steps);
+                                
+                            }, 1500)
+                        }
+    
+    
+                        //setSteps(count => count+1);
+                        setChoiceCard(null);
+                        console.log("steps01:", steps);
+                        
+                        setStateTurn(1);
+                        console.log("stateTurn1:", stateTurn);
+                }
+            }, 500);
             
 
         }
@@ -94,56 +172,8 @@ const BoardPage = () => {
         asyncEffect();
 
         // return async () => {
-
-        //     if (stateTurn === 2)
-        //     {
-        //         console.log("effect2")
-                
-        //         const params = {
-        //             currentPlayer: 'p1',
-        //             hands: {
-        //             p1: player1,
-        //             p2: player2
-        //             },
-        //             move: null,
-        //             board: serverBoard,
-        //         };
-
-        //         const game = await requestAPI.game(params);
-        //         console.log("gameRequest", game)
-
-        //         setBoard(returnBoard(game.oldBoard));
-
-        //             if (game.move !== null)
-        //             {
-        //                 const idAi = game.move.poke.id;
-                    
-        //                 setTimeout(() => setPlayer2(prevState => prevState.map(item => {
-        //                         if (item.id === idAi)
-        //                             return {
-        //                                 ...item,
-        //                                 selected: true,
-        //                             }
+        
             
-        //                         return item;
-        //                     })), 1000
-        //                 );
-
-        //                 setTimeout(() => {
-        //                     setPlayer2(() => game.hands.p2.pokes.map(item => item.poke));
-        //                     setServerBoard(game.board);
-        //                     setBoard(returnBoard(game.board));
-
-        //                     setSteps(prevState => prevState+1);
-        //                 }, 1500)
-        //             }
-
-
-        //             setSteps(count => count+1);
-        //             setChoiceCard(null);
-
-        //             console.log("steps:", steps);
-        //     }
 
         // }
     }, [])
@@ -151,8 +181,9 @@ const BoardPage = () => {
 
     useEffect(() => {
         async function getFullResult() {
-            if (steps === 9)
+            if (isBoardFull(board))
             {
+                console.log("board", board);
                 const [count1, count2] = counterWin(board, player1, player2);
                 let caption = "";
 
@@ -181,7 +212,7 @@ const BoardPage = () => {
             }
         };
         getFullResult();
-    }, [steps]);
+    }, [board]);
     
 
     if (Object.values(gameRedux.player1).length < 5)
@@ -275,15 +306,21 @@ const BoardPage = () => {
                     setBoard(returnBoard(game.board));
 
                     setSteps(prevState => prevState+1);
+                    stepsCounter++;
+                    console.log("steps after setBoard:", steps);
                 }, 1500)
             }
 
 
             setSteps(count => count+1);
+            stepsCounter++;
             setChoiceCard(null);
 
             console.log("steps:", steps);
-            //setStateTurn(turn === 1 ? 2 : 1);
+            console.log("stepsCounter:", stepsCounter);
+            //setStateTurn(prevState => prevState === 1 ? 2 : 1);
+            console.log("stateTurn:", stateTurn);
+            
         }
 
         

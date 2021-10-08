@@ -19,7 +19,8 @@ const PlayerBoard = ({cards, onClickCard, player, turnPlayer}) => {
                             {[s.selected]: item.selected})}
                             onClick={() => {
                                 const turn = turnPlayer;
-
+                                console.log("turnPlayer", turnPlayer);
+                                console.log("player", player);
                                 if (turn === player)
                                 {
                                     item.selected = true;
@@ -27,6 +28,8 @@ const PlayerBoard = ({cards, onClickCard, player, turnPlayer}) => {
                                         player,
                                         ...item})
                                 }
+                                else
+                                    item.selected = false;
                             }}
                             >
                             <PokemonCard
