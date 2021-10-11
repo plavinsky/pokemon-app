@@ -35,13 +35,14 @@ const BoardPage = () => {
     if (Object.values(gameRedux.player1).length === 0)
         history.replace("/game");
 
+    //makeMove in API
     const makeMove = async (currentPlayer, move) => {
 
         const params = {
             currentPlayer,
             hands: {
             p1: player1,
-            p2: gameRedux.player2
+            p2: player2
             },
             move,
             board: serverBoard,
@@ -71,7 +72,7 @@ const BoardPage = () => {
 
             setTimeout(() => {
                 setPlayer2(() => game.hands.p2.pokes.map(item => item.poke));
-                //setPlayer1(() => game.hands.p1.pokes.map(item => item.poke));
+                //setPlayer2(prevState => prevState.filter(item => item.id !== game?.move?.poke?.id));
                 setServerBoard(game.board);
                 setBoard(returnBoard(game.board));       
                 setStateTurn(1);
@@ -90,47 +91,9 @@ const BoardPage = () => {
             const turn = Math.floor(Math.random()*2+1);
             setStateTurn(turn);
 
-            if (turn === 2)
-            {
+            if (turn === 2) {
                 setTimeout( async () => {
-                    
                         makeMove('p2', null);
-                        // const params = {
-                        //     currentPlayer: 'p2',
-                        //     hands: {
-                        //     p1: player1,
-                        //     p2: gameRedux.player2
-                        //     },
-                        //     move: null,
-                        //     board: serverBoard,
-                        // };
-        
-                        // const game = await requestAPI.game(params);
-                    
-                        // if (game.move !== null)
-                        // {
-                        //     const idAi = game?.move?.poke?.id;
-                        
-                        //     setTimeout(() => setPlayer2(prevState => prevState.map(item => {
-                        //             if (item.id === idAi)
-                        //                 return {
-                        //                     ...item,
-                        //                     selected: true,
-                        //                 }
-                        //             return item;
-                        //         })), 1000
-                        //     );
-
-                        //     setTimeout(() => {
-                        //         setPlayer2(() => game.hands.p2.pokes.map(item => item.poke));
-                        //         setServerBoard(game.board);
-                        //         setBoard(returnBoard(game.board));       
-                        //         setStateTurn(1);
-                                
-                        //     }, 1500)
-                        // }
-                        // setChoiceCard(null);
-                    
                 }, 500);
             }   
 
@@ -196,7 +159,7 @@ const BoardPage = () => {
 
     const handleClickBoardPlate = async (position) => {
         
-        //check Dublicate card - need to rewrite
+        //check Dublicate card 
         const isDublicate = board.some(({card}) => {
             if (card && card.id && choiceCard && choiceCard.id)
                 return ( card.id === choiceCard.id && card.possession === choiceCard.possession )
@@ -212,14 +175,6 @@ const BoardPage = () => {
                 poke: choiceCard,
                 position
             });
-
-            // if (choiceCard.player === 1) {
-            //     setPlayer1(prevState => prevState.filter(item => item.id !== choiceCard.id))
-            // }
-
-            // if (choiceCard.player === 2) {
-            //     setPlayer2(prevState => prevState.filter(item => item.id !== choiceCard.id))
-            // }
         }
 
         
