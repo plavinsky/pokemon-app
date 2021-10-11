@@ -8,7 +8,15 @@ import s from './style.module.css';
 
 const PlayerBoard = ({cards, onClickCard, player, turnPlayer}) => {
     const [isSelected,setSelected] = useState(null);
-    //isSelected === item.id
+    const [ownCards,setOwnCards] = useState(cards);
+   
+    const deselectCards = (id) => {
+        cards = cards.map(item => {
+            if (item.id !== id)
+                item.selected = false;
+        });
+    }
+
     if (cards)
         return (
             <>
@@ -24,6 +32,7 @@ const PlayerBoard = ({cards, onClickCard, player, turnPlayer}) => {
                                 if (turn === player)
                                 {
                                     item.selected = true;
+                                    deselectCards(item.id)
                                     onClickCard && onClickCard({
                                         player,
                                         ...item})

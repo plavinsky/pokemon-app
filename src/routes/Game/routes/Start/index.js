@@ -63,7 +63,8 @@ const StartPage = ({onChangePage}) => {
                 onClick={handleStartGame}
                 disabled={gameRedux && gameRedux.player1 && (Object.keys(gameRedux.player1).length < 5)}>START GAME</button>
         </div>
-
+        <br/>
+        <br/>
         <div className={s.flex} >
             {
               Object.entries(pokemons).map(([key, {name, id, img, type, values, selected}]) => 
