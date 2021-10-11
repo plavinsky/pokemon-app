@@ -9,21 +9,11 @@ import Result from './component/Result';
 import requestAPI from '../../../../utils/request'
 
 import s from './style.module.css';
+import { counterWin, isBoardFull, returnBoard } from '../../../../utils';
 
-const counterWin = (board, player1, player2) => {
-    let player1Counter = player1.length;
-    let player2Counter = player2.length;
 
-    board.forEach(item => {
-        if (item.card.possession === 'red')
-            player2Counter++;
 
-        if (item.card.possession === 'blue')
-            player1Counter++;
-    });
 
-    return [player1Counter, player2Counter];
-}
 
 const BoardPage = () => {
     const gameRedux = useSelector(selectGame);
@@ -32,62 +22,109 @@ const BoardPage = () => {
     const [player1, setPlayer1] = useState(() => Object.values(gameRedux.player1).map(item=>({...item, possession:'blue'})));
     const [player2, setPlayer2] = useState([]);
     
-    const [stateTurn, setStateTurn] = useState(1);    
+    const [stateTurn, setStateTurn] = useState(undefined);    
     const [result, setResult] = useState(null);
     const [choiceCard, setChoiceCard] = useState(null);
-    const [steps, setSteps] = useState(0);
+    const [serverBoard, setServerBoard] = useState([0,0,0,0,0,0,0,0,0]);
 
     
     const dispatch = useDispatch();
     const history = useHistory();
 
+
     if (Object.values(gameRedux.player1).length === 0)
         history.replace("/game");
 
-    let turn = stateTurn;
-        if (turn === undefined)
-            {
-                turn = Math.floor(Math.random()*2)+1;
-                setStateTurn(turn);
+    //makeMove in API
+    const makeMove = async (currentPlayer, move) => {
 
-            }
+        const params = {
+            currentPlayer,
+            hands: {
+            p1: player1,
+            p2: player2
+            },
+            move,
+            board: serverBoard,
+        };
 
+        const game = await requestAPI.game(params);
 
+        if (currentPlayer === 'p1') {
+            setBoard(returnBoard(game.oldBoard));
+            setStateTurn(2);
+            setPlayer1(prevState => prevState.filter(item => item.id !== choiceCard.id))
+         }
     
+        if (game.move !== null)
+        {
+            const idAi = game?.move?.poke?.id;
+        
+            setTimeout(() => setPlayer2(prevState => prevState.map(item => {
+                    if (item.id === idAi)
+                        return {
+                            ...item,
+                            selected: true,
+                        }
+                    return item;
+                })), 1000
+            );
 
+            setTimeout(() => {
+                setPlayer2(() => game.hands.p2.pokes.map(item => item.poke));
+                //setPlayer2(prevState => prevState.filter(item => item.id !== game?.move?.poke?.id));
+                setServerBoard(game.board);
+                setBoard(returnBoard(game.board));       
+                setStateTurn(1);
+                
+            }, 1500)
+        }
+        setChoiceCard(null);
+
+    }
+    
+    ///first move on render, when both players are ready
+    if (player1.length === 5 && player2.length === 5 && stateTurn === undefined)
+    {
+        
+        setTimeout( () => {
+            const turn = Math.floor(Math.random()*2+1);
+            setStateTurn(turn);
+
+            if (turn === 2) {
+                setTimeout( async () => {
+                        makeMove('p2', null);
+                }, 500);
+            }   
+
+        }, 2000);
+    }
+    
+    
+    ////Set Player2 effect
     useEffect(async () => {
-        // const boardResponse = await fetch("https://reactmarathon-api.netlify.app/api/board");
-        // const boardRequest = await boardResponse.json();
-
         async function asyncEffect() {
             const boardRequest = await requestAPI.getBoard();
             setBoard(boardRequest.data);
-
-            console.log("boardRequest", JSON.stringify(boardRequest));
             
-            // const player2Response = await fetch("https://reactmarathon-api.netlify.app/api/create-player");
-            // const player2Request =  await player2Response.json();
-
             const player2Request = await requestAPI.gameStart({pokemons: Object.values(gameRedux.player1)});
-
-            console.log("player2Request", JSON.stringify(player2Request));
-
             const res = player2Request.data.map( item => ({
                 ...item,
                 possession: 'red',
                 }));
             
             dispatch(gameMethods.player2Set(player2Request.data.map(item=>({...item}))));
-            setPlayer2(res);
+            setPlayer2(res);            
         }
         
         asyncEffect();
     }, [])
 
 
+    ///Check Final and countWiner effect
     useEffect(() => {
         async function getFullResult() {
-            if (steps === 9)
+            if (isBoardFull(board)) 
             {
                 const [count1, count2] = counterWin(board, player1, player2);
                 let caption = "";
@@ -117,21 +154,15 @@ const BoardPage = () => {
             }
         };
         getFullResult();
-    }, [steps]);
-    
-
-    if (Object.values(gameRedux.player1).length < 5)
-        history.replace("/game");
+    }, [board]);
     
 
     const handleClickBoardPlate = async (position) => {
         
+        //check Dublicate card 
         const isDublicate = board.some(({card}) => {
             if (card && card.id && choiceCard && choiceCard.id)
-                return (
-                    card.id === choiceCard.id &&
-                    card.possession === choiceCard.possession
-                )
+                return ( card.id === choiceCard.id && card.possession === choiceCard.possession )
             else
                 return false;
         });
@@ -139,34 +170,11 @@ const BoardPage = () => {
         if (isDublicate) return;
 
         if (choiceCard) {
-            const params = {
-                position,
-                card: choiceCard,
-                board,
-            }
 
-            const res = await fetch('https://reactmarathon-api.netlify.app/api/players-turn', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(params),
+            makeMove('p1', { 
+                poke: choiceCard,
+                position
             });
-
-            const request = await res.json();        
-
-            if (choiceCard.player === 1) {
-                setPlayer1(prevState => prevState.filter(item => item.id !== choiceCard.id))
-            }
-
-            if (choiceCard.player === 2) {
-                setPlayer2(prevState => prevState.filter(item => item.id !== choiceCard.id))
-            }
-
-            setBoard(request.data);
-            setSteps(steps+1);
-            setChoiceCard(null);
-            setStateTurn(turn === 1 ? 2 : 1);
         }
 
         
@@ -197,7 +205,10 @@ const BoardPage = () => {
                     ))
                 }
             </div>
-            <ArrowChoice side={stateTurn}/>
+            {
+                <ArrowChoice side={stateTurn}/>
+            }
+            
             <div className={s.playerTwo}>
             <PlayerBoard 
                 player={2}

@@ -5,16 +5,16 @@ import cn from 'classnames';
 
 const FinishCards = ({cards, player, ifWiner, onClickNewCard}) => {
     const [isSelected,setSelected] = useState(null);
-
-    console.log("FinishCards ifWiner:", ifWiner);
-
+    
     return (
         <div className={s.finishflex}>
             
             {
                 cards && cards.map(
                     (item) => (
-                    <div className={cn(s.cardBoard,
+                    <div 
+                        key={item.name}
+                        className={cn(s.cardBoard,
                         {[s.selected]: isSelected === item.id})}
                         onClick={() => {
                             ifWiner && setSelected(item.id);

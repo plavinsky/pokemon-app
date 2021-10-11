@@ -8,26 +8,37 @@ import s from './style.module.css';
 
 const PlayerBoard = ({cards, onClickCard, player, turnPlayer}) => {
     const [isSelected,setSelected] = useState(null);
-    
+    const [ownCards,setOwnCards] = useState(cards);
+   
+    const deselectCards = (id) => {
+        cards = cards.map(item => {
+            if (item.id !== id)
+                item.selected = false;
+        });
+    }
+
     if (cards)
         return (
             <>
                 {
                     cards && cards.map(
                         (item) => (
-                        <div className={cn(s.cardBoard, 
-                            {[s.selected]: isSelected === item.id})}
+                        <div key={item.id} className={cn(s.cardBoard, 
+                            {[s.selected]: item.selected})}
                             onClick={() => {
                                 const turn = turnPlayer;
-
+                                console.log("turnPlayer", turnPlayer);
+                                console.log("player", player);
                                 if (turn === player)
                                 {
-                                    console.log(item.id);
-                                    setSelected(item.id);
+                                    item.selected = true;
+                                    deselectCards(item.id)
                                     onClickCard && onClickCard({
                                         player,
                                         ...item})
                                 }
+                                else
+                                    item.selected = false;
                             }}
                             >
                             <PokemonCard
