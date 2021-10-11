@@ -87,7 +87,7 @@ const BoardPage = () => {
     {
         
         setTimeout( () => {
-            const turn = 2//Math.floor(Math.random()*2+1);
+            const turn = Math.floor(Math.random()*2+1);
             setStateTurn(turn);
 
             if (turn === 2)
