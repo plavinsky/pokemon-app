@@ -73,6 +73,7 @@ const BoardPage = () => {
             setTimeout(() => {
                 setPlayer2(() => game.hands.p2.pokes.map(item => item.poke));
                 //setPlayer2(prevState => prevState.filter(item => item.id !== game?.move?.poke?.id));
+                
                 setServerBoard(game.board);
                 setBoard(returnBoard(game.board));       
                 setStateTurn(1);
