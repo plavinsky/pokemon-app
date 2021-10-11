@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import {ReactComponent as LoginSVG} from "../../assets/login.svg";
 import {ReactComponent as UserSVG} from "../../assets/user.svg";
 import { selectLocalID, selectUserIsLoading } from "../../store/user";
-import {useHistory} from 'react-router';
 
 import s from "./style.module.css";
 
@@ -12,7 +11,7 @@ import s from "./style.module.css";
 
 
 const Navbar = ({onMenuClick, isActive, bgActive = false, onClickLogin}) => {
-    const history = useHistory();
+
     const isLoading = useSelector(selectUserIsLoading);
     const localId = useSelector(selectLocalID);
 
@@ -20,9 +19,9 @@ const Navbar = ({onMenuClick, isActive, bgActive = false, onClickLogin}) => {
     //     onMenuClick && onMenuClick();
     // }
 
-    const handleLogoClick = () => {
-        history.push('');
-    }
+    // const handleLogoClick = () => {
+    //     history.push('');
+    // }
 
 
 
@@ -30,7 +29,7 @@ const Navbar = ({onMenuClick, isActive, bgActive = false, onClickLogin}) => {
         <nav id={s.navbar} className={cn({[s.bgActive]: bgActive})}>
         <div className={s.navWrapper}>
             <div>
-                <p className={s.brand} onClick={handleLogoClick}>
+                <p className={s.brand} onClick={onMenuClick}>
                 LOGO
                 </p>
             </div>

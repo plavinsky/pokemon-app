@@ -38,7 +38,7 @@ const Menu = ({isActive: isOpen = null, onBtnClick}) => {
                     {
                         MENU.map(({title, to}, index) => (
                             <li key={index}> 
-                                <Link to={to} onClick={handleClick} replace>{title}</Link>
+                                <Link to={to} onClick={handleClick}>{title}</Link>
                             </li>
                         ))
                     }            
