@@ -73,7 +73,10 @@ class Firebase{
       fetch(`${firebaseConfig.databaseURL}/${user.localId}/pokemons.json?auth=${localStorage.getItem('idToken')}`, {
           method: 'POST',
           body: JSON.stringify(data),
-          auth: localStorage.getItem('idToken')
+          auth: localStorage.getItem('idToken'),
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('idToken')
+          }
       }).then(() => cb());
   
   }
@@ -83,7 +86,11 @@ class Firebase{
     //debugger;
     // var resp1 = await this.database.ref('pokemons').once("value").then(snapshot => snapshot.val());
 
-    const resp = await fetch(`${firebaseConfig.databaseURL}/${localStorage.getItem('localId')}/pokemons.json?auth=${localStorage.getItem('idToken')}`).then(res => res.json());
+    const resp = await fetch(`${firebaseConfig.databaseURL}/${localStorage.getItem('localId')}/pokemons.json?auth=${localStorage.getItem('idToken')}`,{
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem('idToken')
+      }
+    }).then(res => res.json());
 
     return resp;
   }
