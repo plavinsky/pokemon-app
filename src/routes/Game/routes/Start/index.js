@@ -17,6 +17,7 @@ const StartPage = ({onChangePage}) => {
     const [pokemons, setPokemons] = useState({});
     const gameRedux = useSelector(selectGame);
     
+    
     useEffect(() => {
         dispatch(getPokemonAsync());
         dispatch(gameMethods.clean());

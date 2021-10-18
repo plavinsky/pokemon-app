@@ -27,11 +27,12 @@ const App = () => {
   const dispatch = useDispatch();
   //const user = useSelector(selectUser);
 
+  console.log("render");
+
   useEffect(() => {
     function doDispatch() {
       dispatch(getUserAsync());
     }
-
     doDispatch();
   }, [])
 

@@ -70,9 +70,10 @@ class Firebase{
   addPokemonAPI = (data, user, cb) => {
   
     //fetch(`${firebaseConfig.databaseURL}/${user.localId}/pokemons.json?auth=${localStorage.getItem('idToken')}`, {
-      fetch(`${firebaseConfig.databaseURL}/${user.localId}/pokemons.json`, {
+      fetch(`${firebaseConfig.databaseURL}/${user.localId}/pokemons.json?auth=${localStorage.getItem('idToken')}`, {
           method: 'POST',
-          body: JSON.stringify(data)
+          body: JSON.stringify(data),
+          auth: localStorage.getItem('idToken')
       }).then(() => cb());
   
   }
@@ -82,7 +83,7 @@ class Firebase{
     //debugger;
     // var resp1 = await this.database.ref('pokemons').once("value").then(snapshot => snapshot.val());
 
-    var resp = await fetch(`${firebaseConfig.databaseURL}/${localStorage.getItem('localId')}/pokemons.json`).then(res => res.json());
+    const resp = await fetch(`${firebaseConfig.databaseURL}/${localStorage.getItem('localId')}/pokemons.json?auth=${localStorage.getItem('idToken')}`).then(res => res.json());
 
     return resp;
   }
