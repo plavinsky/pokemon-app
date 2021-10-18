@@ -59,7 +59,7 @@ const StartPage = ({onChangePage}) => {
     return (
         <>        
         <div className={s.flex}>
-            <button onClick={handleAddPokemonClick}>ADD NEW POKEMON</button>
+            {/* <button onClick={handleAddPokemonClick}>ADD NEW POKEMON</button> */}
             <button 
                 onClick={handleStartGame}
                 disabled={gameRedux && gameRedux.player1 && (Object.keys(gameRedux.player1).length < 5)}>START GAME</button>

@@ -23,6 +23,7 @@ export const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
+
 class Firebase{
   constructor() {
     this.fire = firebase;
@@ -70,7 +71,8 @@ class Firebase{
   addPokemonAPI = (data, user, cb) => {
   
     //fetch(`${firebaseConfig.databaseURL}/${user.localId}/pokemons.json?auth=${localStorage.getItem('idToken')}`, {
-      fetch(`${firebaseConfig.databaseURL}/${user.localId}/pokemons.json?auth=${localStorage.getItem('idToken')}`, {
+      // fetch(`${firebaseConfig.databaseURL}/${user.localId}/pokemons.json?auth=${localStorage.getItem('idToken')}`, {
+      fetch(`${firebaseConfig.databaseURL}/${user.localId}/pokemons.json`, {
           method: 'POST',
           body: JSON.stringify(data),
           auth: localStorage.getItem('idToken'),
@@ -78,7 +80,8 @@ class Firebase{
             'Authorization': 'Bearer ' + localStorage.getItem('idToken')
           }
       }).then(() => cb());
-  
+      
+      json
   }
 
   getPokemonsOnceAPI = async () => {
@@ -86,11 +89,8 @@ class Firebase{
     //debugger;
     // var resp1 = await this.database.ref('pokemons').once("value").then(snapshot => snapshot.val());
 
-    const resp = await fetch(`${firebaseConfig.databaseURL}/${localStorage.getItem('localId')}/pokemons.json?auth=${localStorage.getItem('idToken')}`,{
-      headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('idToken')
-      }
-    }).then(res => res.json());
+    // const resp = await fetch(`${firebaseConfig.databaseURL}/${localStorage.getItem('localId')}/pokemons.json?auth=${localStorage.getItem('idToken')}`).then(res => res.json());
+    const resp = await fetch(`${firebaseConfig.databaseURL}/${localStorage.getItem('localId')}/pokemons.json`).then(res => res.json());
 
     return resp;
   }
