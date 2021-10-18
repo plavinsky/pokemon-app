@@ -81,7 +81,6 @@ class Firebase{
           }
       }).then(() => cb());
       
-      json
   }
 
   getPokemonsOnceAPI = async () => {
