@@ -17,7 +17,8 @@ export const firebaseConfig = {
   projectId: "pokemon-game-2bc55",
   storageBucket: "pokemon-game-2bc55.appspot.com",
   messagingSenderId: "438028951268",
-  appId: "1:438028951268:web:6ecf11f19340078c1916f1"
+  appId: "1:438028951268:web:6ecf11f19340078c1916f1",
+  auth: "dneizi4DuYacEyS8uk6fFwhUjwXn1ZVXShWR8l4q"
 };
 
 // Initialize Firebase
@@ -71,26 +72,31 @@ class Firebase{
   addPokemonAPI = (data, user, cb) => {
   
     //fetch(`${firebaseConfig.databaseURL}/${user.localId}/pokemons.json?auth=${localStorage.getItem('idToken')}`, {
-      // fetch(`${firebaseConfig.databaseURL}/${user.localId}/pokemons.json?auth=${localStorage.getItem('idToken')}`, {
-      fetch(`${firebaseConfig.databaseURL}/${user.localId}/pokemons.json`, {
+      fetch(`${firebaseConfig.databaseURL}/${user.localId}/pokemons.json?auth=${firebaseConfig.auth}`, {
+      // fetch(`${firebaseConfig.databaseURL}/${user.localId}/pokemons.json`, {
           method: 'POST',
           body: JSON.stringify(data),
-          auth: localStorage.getItem('idToken'),
-          headers: {
-            'Authorization': 'Bearer ' + localStorage.getItem('idToken')
-          }
+          // headers: {
+          //   'Authorization': 'Bearer ' + localStorage.getItem('idToken')
+          // }
       }).then(() => cb());
       
   }
 
-  getPokemonsOnceAPI = async () => {
+  
     // return 
     //debugger;
     // var resp1 = await this.database.ref('pokemons').once("value").then(snapshot => snapshot.val());
 
     // const resp = await fetch(`${firebaseConfig.databaseURL}/${localStorage.getItem('localId')}/pokemons.json?auth=${localStorage.getItem('idToken')}`).then(res => res.json());
-    const resp = await fetch(`${firebaseConfig.databaseURL}/${localStorage.getItem('localId')}/pokemons.json`).then(res => res.json());
-
+  getPokemonsOnceAPI = async () => {
+    // const resp = await fetch(`${firebaseConfig.databaseURL}/${localStorage.getItem('localId')}/pokemons.json`).then(res => res.json());
+    const resp = await fetch(`${firebaseConfig.databaseURL}/${localStorage.getItem('localId')}/pokemons.json?auth=${firebaseConfig.auth}`).then(res => res.json());
+    // const resp = await fetch(`${firebaseConfig.databaseURL}/${localStorage.getItem('localId')}/pokemons.json`, {
+    //   headers: {
+    //       'auth': localStorage.getItem('idToken')
+    //     }
+    // }).then(res => res.json());
     return resp;
   }
 
