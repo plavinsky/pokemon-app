@@ -71,8 +71,8 @@ class Firebase{
 
   addPokemonAPI = (data, user, cb) => {
   
-    //fetch(`${firebaseConfig.databaseURL}/${user.localId}/pokemons.json?auth=${localStorage.getItem('idToken')}`, {
-      fetch(`${firebaseConfig.databaseURL}/${user.localId}/pokemons.json?auth=${firebaseConfig.auth}`, {
+    fetch(`${firebaseConfig.databaseURL}/${user.localId}/pokemons.json?auth=${localStorage.getItem('idToken')}`, {
+      // fetch(`${firebaseConfig.databaseURL}/${user.localId}/pokemons.json?auth=${firebaseConfig.auth}`, {
       // fetch(`${firebaseConfig.databaseURL}/${user.localId}/pokemons.json`, {
           method: 'POST',
           body: JSON.stringify(data),
@@ -90,8 +90,8 @@ class Firebase{
 
     // const resp = await fetch(`${firebaseConfig.databaseURL}/${localStorage.getItem('localId')}/pokemons.json?auth=${localStorage.getItem('idToken')}`).then(res => res.json());
   getPokemonsOnceAPI = async () => {
-    // const resp = await fetch(`${firebaseConfig.databaseURL}/${localStorage.getItem('localId')}/pokemons.json`).then(res => res.json());
-    const resp = await fetch(`${firebaseConfig.databaseURL}/${localStorage.getItem('localId')}/pokemons.json?auth=${firebaseConfig.auth}`).then(res => res.json());
+    const resp = await fetch(`${firebaseConfig.databaseURL}/${localStorage.getItem('localId')}/pokemons.json?auth=${localStorage.getItem('idToken')}`).then(res => res.json());
+    // const resp = await fetch(`${firebaseConfig.databaseURL}/${localStorage.getItem('localId')}/pokemons.json?auth=${firebaseConfig.auth}`).then(res => res.json());
     // const resp = await fetch(`${firebaseConfig.databaseURL}/${localStorage.getItem('localId')}/pokemons.json`, {
     //   headers: {
     //       'auth': localStorage.getItem('idToken')

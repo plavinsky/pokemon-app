@@ -54,6 +54,7 @@ const LoginForm = ({isOpen, onSubmitLoginForm}) => {
             }
             
             NotificationManager.success("SignIn successfully!")
+            console.log(response.idToken);
             localStorage.setItem('idToken', response.idToken);
             dispatch(getUserAsync());
              
