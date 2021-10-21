@@ -11,7 +11,7 @@ const loginSignUpResponse = async (isReg, email, password) => {
         body: JSON.stringify({
             email,
             password,
-            returnSecurityToken: true
+            returnSecureToken: true
         })
     }
     
@@ -54,7 +54,7 @@ const LoginForm = ({isOpen, onSubmitLoginForm}) => {
             }
             
             NotificationManager.success("SignIn successfully!")
-            console.log(response.idToken);
+            console.log("response.idToken", response.idToken);
             localStorage.setItem('idToken', response.idToken);
             dispatch(getUserAsync());
              
